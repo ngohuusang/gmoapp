@@ -28,7 +28,7 @@
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
     </http>
     
-	<bean id="loginSuccessHandler" class="vn.gmostore.account.oauth.AuthenticateSuccessfulHandler" />
+	<bean id="loginSuccessHandler" class="vn.gmostore.basic.oauth.AuthenticateSuccessfulHandler" />
 	<!-- The OAuth2 protected resources are separated out into their own block so we can deal with authorization and error handling 
 		separately. This isn't mandatory, but it makes it easier to control the behavior. -->
 <!-- 	<http pattern="/oauth/(users|clients)/.*" request-matcher="regex" create-session="stateless" entry-point-ref="oauthAuthenticationEntryPoint" -->
@@ -95,7 +95,7 @@
 		<authentication-provider user-service-ref="userDetailsService" />
 	</authentication-manager>
 	
-	<bean id="userDetailsService" class="vn.gmostore.account.oauth.UserDetailsServiceImpl" />
+	<bean id="userDetailsService" class="vn.gmostore.basic.oauth.UserDetailsServiceImpl" />
 
 	<bean id="clientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
 		<constructor-arg ref="clientDetails" />
@@ -113,7 +113,7 @@
 		<property name="clientDetailsService" ref="clientDetails" />
 	</bean>
 
-	<bean id="tokenEnhancer" class="vn.gmostore.account.oauth.CustomTokenEnhancer" />
+	<bean id="tokenEnhancer" class="vn.gmostore.basic.oauth.CustomTokenEnhancer" />
 
 
 	<oauth:authorization-server  token-endpoint-url="/oauth/token" authorization-endpoint-url="/oauth/authorize" client-details-service-ref="clientDetails" token-services-ref="tokenServices">
@@ -125,7 +125,7 @@
 		<oauth:password />
 	</oauth:authorization-server>
 
-	<bean id="clientDetails" class="vn.gmostore.account.oauth.ClientDetailsServiceImpl" />
+	<bean id="clientDetails" class="vn.gmostore.basic.oauth.ClientDetailsServiceImpl" />
 	
 	<oauth:resource-server id="resourceServerFilter" resource-id="gmostore-services" token-services-ref="tokenServices" />
 	

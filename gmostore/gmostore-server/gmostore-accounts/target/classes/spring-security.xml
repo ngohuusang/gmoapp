@@ -116,7 +116,7 @@
 	</bean>
 
 
-	<bean id="userApprovalHandler" class="vn.gmostore.account.oauth.UserApprovalHandler">
+	<bean id="userApprovalHandler" class="vn.gmostore.basic.oauth.UserApprovalHandler">
 		<property name="autoApproveClients">
 			<set>
 				<value>my-less-trusted-autoapprove-client</value>
