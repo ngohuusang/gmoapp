@@ -1,10 +1,12 @@
 gmoapp
 ======
 A. INTRODUCE
+======
 This project is using:
 Hibernate, Spring, MySQL, Spring security with Oauth2
 
 B. STEP TO START PROJECT
+======
 1. Require
 - Eclipse, M2e, JDK7, tomcat 7, MySQL 5
 - REST client plug-in for chrome or firefox
@@ -15,6 +17,7 @@ By File->Import->Maven->Exists maven project
 4. Start using tomcat
 
 C. TEST
+======
 1. Get access_token from:
 POST http://localhost:8080/gmostore-api/oauth/token?grant_type=password&username=sang&password=password&client_id=my-trusted-client
 Response:
