@@ -27,6 +27,7 @@
 		<hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
 		<ehcache.version>2.6.6</ehcache.version>
 		<ehcache-web.version>2.0.4</ehcache-web.version>
+		<ehcache-spring-annotations.version>1.2.0</ehcache-spring-annotations.version>
 		<bonecp.spring.version>0.7.1.RELEASE</bonecp.spring.version>
 
 		<aspectjrt.version>1.7.2</aspectjrt.version>
@@ -639,6 +640,11 @@
 				<groupId>net.sf.ehcache</groupId>
 				<artifactId>ehcache-web</artifactId>
 				<version>${ehcache-web.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.ehcache-spring-annotations</groupId>
+				<artifactId>ehcache-spring-annotations</artifactId>
+				<version>${ehcache-spring-annotations.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>

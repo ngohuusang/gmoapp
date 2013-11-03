@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import vn.gmostore.basic.dispatch.GetResult;
 import vn.gmostore.basic.dto.ProductDto;
 
+import com.googlecode.ehcache.annotations.Cacheable;
+
 @Controller
 public class UserController {
 
@@ -23,7 +25,7 @@ public class UserController {
     //    , produces = { MediaType.APPLICATION_JSON_VALUE })
     )
     //    @Cacheable(value="products", key="#student.name")
-    //    @Cacheable(value = "products")
+    @Cacheable(cacheName = "products")
     @ResponseBody
     public GetResult<ProductDto> getPhoto() throws IOException {
         String username = "";
