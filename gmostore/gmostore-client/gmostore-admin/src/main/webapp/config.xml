@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+        id="vn.gmostore.web"
+        version="1.0.0">
+    <name>GmoStore</name>
+
+    <description>
+        GmoStore application.
+    </description>
+
+    <author href="http://gmostore.vn" email="ngohuusang@gmail.com">
+        GmoStore Team
+    </author>
+
+    <icon src="icons/ic_launcher.png" width="70" height="70" />
+</widget>

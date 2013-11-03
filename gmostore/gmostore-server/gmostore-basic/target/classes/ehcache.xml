@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TIPS USAGE CACHE 1. read-only Caches data that is never updated. 2. 
+	nonstrict-read-write Caches data that is sometimes updated without ever locking 
+	the cache. If concurrent access to an item is possible, this concurrency 
+	strategy makes no guarantee that the item returned from the cache is the 
+	latest version available in the database. Configure your cache timeout accordingly! 
+	3. read-write Caches data that is sometimes updated while maintaining the 
+	semantics of "read committed" isolation level. If the database is set to 
+	"repeatable read", this concurrency strategy almost maintains the semantics. 
+	Repeatable read isolation is compromised in the case of concurrent writes. -->
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false" >
+
+	<diskStore path="java.io.tmpdir" />
+
+	<defaultCache maxElementsInMemory="100" maxElementsOnDisk="1000"
+		eternal="false" overflowToDisk="true" diskPersistent="false"
+		memoryStoreEvictionPolicy="LRU" timeToIdleSeconds="120000"
+		timeToLiveSeconds="120000" />
+
+	<cache name="vn.gmostore.basic.model.User" maxElementsInMemory="50"
+		eternal="false" timeToLiveSeconds="600" overflowToDisk="true" />
+	<!-- cache name="com.somecompany.someproject.domain.Country.advancedSearchFacilities" 
+		maxElementsInMemory="450" eternal="false" timeToLiveSeconds="600" overflowToDisk="true" 
+		/> THIS IS CACHE FOR FUNCTION SET /** * Returns the advanced search facilities 
+		that should appear for this country. * @hibernate.set cascade="all" inverse="true" 
+		* @hibernate.collection-key column="COUNTRY_ID" * @hibernate.collection-one-to-many 
+		class="com.wotif.jaguar.domain.AdvancedSearchFacility" * @hibernate.cache 
+		usage="read-write" */ public Set getAdvancedSearchFacilities() { return advancedSearchFacilities; 
+		} ** Hibernate CacheConcurrencyStrategy read-write, nonstrict-read-write 
+		and read-only policies apply to Domain Object collections. Queries Hibernate 
+		allows the caching of query results using two caches. "net.sf.hibernate.cache.StandardQueryCache" 
+		and "net.sf.hibernate.cache.UpdateTimestampsCache" in versions 2.1 to 3.1 
+		and "org.hibernate.cache.StandardQueryCache" and "org.hibernate.cache.UpdateTimestampsCache" 
+		in version 3.2 are always used. StandardQueryCache This cache is used if 
+		you use a query cache without setting a name. A typical ehcache.xml configuration 
+		is: <cache name="org.hibernate.cache.StandardQueryCache" maxElementsInMemory="5" 
+		eternal="false" timeToLiveSeconds="120" overflowToDisk="true"/> UpdateTimestampsCache 
+		Tracks the timestamps of the most recent updates to particular tables. It 
+		is important that the cache timeout of the underlying cache implementation 
+		be set to a higher value than the timeouts of any of the query caches. In 
+		fact, it is recommend that the the underlying cache not be configured for 
+		expiry at all. A typical ehcache.xml configuration is: <cache name="org.hibernate.cache.UpdateTimestampsCache" 
+		maxElementsInMemory="5000" eternal="true" overflowToDisk="true"/> Named Query 
+		Caches In addition, a QueryCache can be given a specific name in Hibernate 
+		using Query.setCacheRegion(String name). The name of the cache in ehcache.xml 
+		is then the name given in that method. The name can be whatever you want, 
+		but by convention you should use "query." followed by a descriptive name. 
+		E.g. <cache name="query.AdministrativeAreasPerCountry" maxElementsInMemory="5" 
+		eternal="false" timeToLiveSeconds="86400" overflowToDisk="true"/> Using Query 
+		Caches For example, let's say we have a common query running against the 
+		Country Domain. Code to use a query cache follows: public List getStreetTypes(final 
+		Country country) throws HibernateException { final Session session = createSession(); 
+		try { final Query query = session.createQuery( "select st.id, st.name" + 
+		" from StreetType st " + " where st.country.id = :countryId " + " order by 
+		st.sortOrder desc, st.name"); query.setLong("countryId", country.getId().longValue()); 
+		query.setCacheable(true); query.setCacheRegion("query.StreetTypes"); return 
+		query.list(); } finally { session.close(); } } -->
+</ehcache>

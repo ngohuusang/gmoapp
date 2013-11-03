@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TIPS USAGE CACHE 1. read-only Caches data that is never updated. 2. 
+	nonstrict-read-write Caches data that is sometimes updated without ever locking 
+	the cache. If concurrent access to an item is possible, this concurrency 
+	strategy makes no guarantee that the item returned from the cache is the 
+	latest version available in the database. Configure your cache timeout accordingly! 
+	3. read-write Caches data that is sometimes updated while maintaining the 
+	semantics of "read committed" isolation level. If the database is set to 
+	"repeatable read", this concurrency strategy almost maintains the semantics. 
+	Repeatable read isolation is compromised in the case of concurrent writes. -->
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+
+	<!-- Sets the path to the directory where cache .data files are created.
+
+         If the path is a Java System Property it is replaced by
+         its value in the running VM.
+
+         The following properties are translated:
+         user.home - User's home directory
+         user.dir - User's current working directory
+         java.io.tmpdir - Default temp file path -->
+    <diskStore path="java.io.tmpdir"/>
+
+
+    <!--Default Cache configuration. These will applied to caches programmatically created through
+        the CacheManager.
+
+        The following attributes are required for defaultCache:
+
+        maxInMemory       - Sets the maximum number of objects that will be created in memory
+        eternal           - Sets whether elements are eternal. If eternal,  timeouts are ignored and the element
+                            is never expired.
+        timeToIdleSeconds - Sets the time to idle for an element before it expires.
+                            i.e. The maximum amount of time between accesses before an element expires
+                            Is only used if the element is not eternal.
+                            Optional attribute. A value of 0 means that an Element can idle for infinity
+        timeToLiveSeconds - Sets the time to live for an element before it expires.
+                            i.e. The maximum time between creation time and when an element expires.
+                            Is only used if the element is not eternal.
+        overflowToDisk    - Sets whether elements can overflow to disk when the in-memory cache
+                            has reached the maxInMemory limit.
+
+        -->
+	<defaultCache maxEntriesLocalHeap="10" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</defaultCache>
+	<!-- Page and Page Fragment Caches -->
+<!-- 	<cache name="ProductsCachingFilter" maxEntriesLocalHeap="10" -->
+<!-- 		eternal="false" timeToIdleSeconds="10000" timeToLiveSeconds="10000"> -->
+<!-- 		<persistence strategy="localTempSwap" /> -->
+<!-- 	</cache> -->
+	<cache name="ProductsCachingFilter" maxEntriesLocalHeap="10"
+		eternal="false" timeToIdleSeconds="5" timeToLiveSeconds="10">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="products" maxElementsInMemory="100" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10" overflowToDisk="true"
+		maxElementsOnDisk="10000000" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+	<cache name="CachedPage2Cache" maxEntriesLocalHeap="10" eternal="false"
+		timeToLiveSeconds="3600">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="SimplePageFragmentCachingFilter"
+		maxEntriesLocalHeap="10" eternal="false" timeToIdleSeconds="10000"
+		timeToLiveSeconds="10000">
+		<persistence strategy="localTempSwap" />
+	</cache>
+	<cache name="SimpleCachingHeadersTimeoutPageCachingFilter"
+		maxEntriesLocalHeap="10" eternal="false" timeToIdleSeconds="10000"
+		timeToLiveSeconds="10000">
+		<persistence strategy="localTempSwap" />
+	</cache>
+</ehcache>

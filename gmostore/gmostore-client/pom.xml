@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>vn.gmostore.webapps</groupId>
+		<artifactId>gmostore-project</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<artifactId>gmostore-client</artifactId>
+	<name>gmostore-client</name>
+	<description>Client side for gmostore's project</description>
+	<packaging>pom</packaging>
+
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>GmoStore</name>
+		<url>http://www.gmostore.vn</url>
+	</organization>
+
+	<modules>
+		<module>gmostore-admin</module>
+	</modules>
+
+	<build>
+		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.version}</version>
+					<configuration>
+						<source>${target.jdk}</source>
+						<target>${target.jdk}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven.surfire.version}</version>
+					<configuration>
+						<includes>
+							<include>**/*Test.java</include>
+						</includes>
+						<excludes>
+							<exclude>**/*GwtTest.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+
+				<!-- GWT -->
+				<!-- 'mvn gwt:run' - runs development mode -->
+				<!-- 'mvn gwt:debug' - runs debug mode -->
+				<!-- 'mvn gwt:compile' - compiles gwt -->
+				<!-- 'mvn integration-test' - runs the gwt tests (*GwtTest.java) -->
+				<!-- 'mvn clean gwt:compile deploy -DskipTests' - deploys to gae & sona 
+					with out running tests -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>${gwt.version}</version>
+					<configuration>
+						<strict>true</strict>
+
+						<testTimeOut>180</testTimeOut>
+						<includes>**/*GwtTest.java</includes>
+						<mode>htmlunit</mode>
+
+						<extraJvmArgs>-Xss1024K -Xmx512M -XX:MaxPermSize=256M</extraJvmArgs>
+						<logLevel>INFO</logLevel>
+						<style>${gwt.style}</style>
+
+						<copyWebapp>true</copyWebapp>
+						<hostedWebapp>${webappDirectory}</hostedWebapp>
+
+						<!--server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server> 
+							<appEngineVersion>${gae.version}</appEngineVersion> <appEngineHome>${gae.home}</appEngineHome> 
+							<extraJvmArgs>-Dappengine.sdk.root=${gae.home}</extraJvmArgs -->
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test</goal>
+								<goal>compile</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven.war.version}</version>
+					<configuration>
+						<webappDirectory>${webappDirectory}</webappDirectory>
+						<webResources>
+							<resource>
+								<directory>src/main/webapp/WEB-INF</directory>
+								<filtering>true</filtering>
+								<targetPath>WEB-INF</targetPath>
+							</resource>
+						</webResources>
+					</configuration>
+				</plugin>
+
+				<!-- Skip deploy -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven.deploy.version}</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
