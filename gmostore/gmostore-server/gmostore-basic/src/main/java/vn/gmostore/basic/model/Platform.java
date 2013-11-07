@@ -38,6 +38,7 @@ public class Platform extends AbstractDomain<Integer> {
     private String description;
     private String icon;
     private String customeCode;
+    private int order;
     private long createDate;
     @JsonIgnore
     private Long deleteDate;
@@ -142,6 +143,15 @@ public class Platform extends AbstractDomain<Integer> {
 
     public void setUpdateDate(Long updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Column(name = "order")
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
 }

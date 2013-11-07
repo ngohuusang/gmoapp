@@ -8,6 +8,6 @@ public class GmoStoreModule extends AbstractPresenterModule {
     protected void configure() {
         install(new SharedModule());
 
-        bindConstant().annotatedWith(RestApplicationPath.class).to("/gmostore-api");
+        bindConstant().annotatedWith(RestApplicationPath.class).to("http://localhost:8080/gmostore-api");
     }
 }

@@ -3,17 +3,24 @@ package vn.gmostore.basic.dto;
 import vn.gmostore.basic.model.Product;
 
 public class ProductDto implements Dto {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     protected Integer id;
     protected String fullName;
     protected String publisher;
     protected String packageName;
     protected String currentVersion;
-    protected String description;
     protected String icon;
-    protected int commandCount;
+    protected long currentGold;
+    protected long currentDiamon;
+    protected String downloadLink;
+    protected int commentCount;
     protected int viewCount;
     protected int sharedCount;
-    protected int ratePoint;
+    protected int ratedPoint;
     protected int fileSize;
     protected long createDate;
     protected Long updateDate;
@@ -22,6 +29,14 @@ public class ProductDto implements Dto {
         if (product == null)
             return;
         this.id = product.getId();
+        this.fullName = product.getFullName();
+        this.publisher = product.getPublisher().getName();
+        this.packageName = product.getPackageName();
+        this.currentVersion = product.getCurrentVersion();
+        this.icon = product.getIcon();
+        this.commentCount = product.getComments().size();
+        this.viewCount = product.getViewCount();
+        this.sharedCount = product.getSharedCount();
     }
 
     public ProductDto() {
@@ -67,14 +82,6 @@ public class ProductDto implements Dto {
         this.currentVersion = currentVersion;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getIcon() {
         return icon;
     }
@@ -115,20 +122,20 @@ public class ProductDto implements Dto {
         this.updateDate = updateDate;
     }
 
-    public int getCommandCount() {
-        return commandCount;
+    public int getCommentCount() {
+        return commentCount;
     }
 
-    public void setCommandCount(int commandCount) {
-        this.commandCount = commandCount;
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 
-    public int getRatePoint() {
-        return ratePoint;
+    public int getRatedPoint() {
+        return ratedPoint;
     }
 
-    public void setRatePoint(int ratePoint) {
-        this.ratePoint = ratePoint;
+    public void setRatedPoint(int ratedPoint) {
+        this.ratedPoint = ratedPoint;
     }
 
     public int getFileSize() {
@@ -138,4 +145,29 @@ public class ProductDto implements Dto {
     public void setFileSize(int fileSize) {
         this.fileSize = fileSize;
     }
+
+    public String getDownloadLink() {
+        return downloadLink;
+    }
+
+    public void setDownloadLink(String downloadLink) {
+        this.downloadLink = downloadLink;
+    }
+
+    public long getCurrentGold() {
+        return currentGold;
+    }
+
+    public void setCurrentGold(long currentGold) {
+        this.currentGold = currentGold;
+    }
+
+    public long getCurrentDiamon() {
+        return currentDiamon;
+    }
+
+    public void setCurrentDiamon(long currentDiamon) {
+        this.currentDiamon = currentDiamon;
+    }
+    
 }

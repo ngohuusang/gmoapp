@@ -5,7 +5,7 @@ package vn.gmostore.server.dao.impl;
 
 import java.util.List;
 
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 
 import vn.gmostore.basic.model.User;
@@ -50,12 +50,18 @@ public class UserDaoImpl extends AbstractDaoImpl<User, Integer> implements UserD
 
     @Override
     public User getUserByUsername(String username) {
-        List<User> usersList = findByCriteria(Restrictions.eq("username", username));
+        //        List<User> usersList = findByCriteria(Restrictions.eq("username", username));
 
-        if (usersList != null && !usersList.isEmpty()) {
-            return (User) usersList.get(0);
-        }
+        //        if (usersList != null && !usersList.isEmpty()) {
+        //            return (User) usersList.get(0);
+        //        }
 
+        return null;
+    }
+
+    @Override
+    protected Criteria createCriteria() {
+        // TODO Auto-generated method stub
         return null;
     }
 }

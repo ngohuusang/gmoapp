@@ -1,11 +1,14 @@
 package vn.gmostore.web.client.rest;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import vn.gmostore.basic.dispatch.GetResult;
 import vn.gmostore.basic.dispatch.GetResults;
@@ -20,9 +23,11 @@ import com.gwtplatform.dispatch.shared.Action;
 import com.gwtplatform.dispatch.shared.NoResult;
 import com.gwtplatform.dispatch.shared.rest.RestService;
 
-@Path(ResourcesPath.PRODUCT)
+@Path("/platforms")
 public interface ProductService extends RestService {
     @GET
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
     Action<GetResults<ProductDto>> getProducts();
 
     @GET

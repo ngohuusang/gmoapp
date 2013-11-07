@@ -4,6 +4,11 @@ import vn.gmostore.basic.model.Product;
 
 public class ProductDetailDto extends ProductDto implements Dto {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public ProductDetailDto(Product product) {
         super(product);
     }

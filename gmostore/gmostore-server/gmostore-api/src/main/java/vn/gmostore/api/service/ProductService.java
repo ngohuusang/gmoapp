@@ -6,13 +6,14 @@ import vn.gmostore.basic.dto.ProductDetailDto;
 import vn.gmostore.basic.dto.ProductDto;
 
 public interface ProductService {
-    ProductDetailDto getProductDetailsBy(Integer id);
 
-    List<ProductDto> getProducts(int offset, int limit);
+    ProductDetailDto getProductDetailsBy(Integer platformId, Integer productId);
 
-    Integer getProductsCount();
+    List<ProductDto> getProducts(Integer platformId, Integer categoryId, int offset, int limit, String orderBy, String orderType);
 
     ProductDto saveOrCreate(ProductDetailDto product);
 
     void delete(Integer productId);
+
+    Integer getProductsCount(Integer platformId, Integer categoryId);
 }

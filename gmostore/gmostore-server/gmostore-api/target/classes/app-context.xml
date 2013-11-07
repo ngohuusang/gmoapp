@@ -3,14 +3,14 @@
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
 	xsi:schemaLocation="
 	       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 	       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 	       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-	       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	       http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
 	<!-- Activates annotation-based bean configuration -->
 	<context:annotation-config />
@@ -18,32 +18,103 @@
 	<!-- needed is for @Configurable -->
 	<context:component-scan base-package="vn.gmostore.api" />
 
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="vn.gmostore.api.converter.DefaultJacksonHttpMessageConverter">
+				<!-- True only for the blog article - a production system would set this 
+					to false to reduce the number of bytes sent across the wire: -->
+				<property name="prettyPrint" value="true" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<mvc:interceptors>
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+	</mvc:interceptors>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+
+	<!-- Unfortunately we have to repeat an instance of this class here because 
+		the mvc:message-converters element above does not support <ref/> elements: -->
+	<bean id="jacksonHttpMessageConverter"
+		class="vn.gmostore.api.converter.DefaultJacksonHttpMessageConverter">
+		<property name="prettyPrint" value="true" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="defaultContentType"
+			value="#{T(org.springframework.http.MediaType).APPLICATION_JSON}" />
+		<property name="viewResolvers">
+			<bean
+				class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+				<property name="prefix" value="/WEB-INF/jsp/"></property>
+				<property name="suffix" value=".jsp"></property>
+			</bean>
+		</property>
+		<property name="defaultViews">
+			<bean
+				class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+				<property name="extractValueFromSingleKeyModel" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- Allow Exceptions to be handled in annotated methods if desired. Otherwise 
+		fallback to the 'restExceptionResolver' below: -->
+	<bean id="annotationMethodHandlerExceptionResolver"
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" >
+		<property name="order" value="1" />
+	</bean>
+	<bean id="restExceptionResolver" class="vn.gmostore.api.exhandler.RestExceptionHandler">
+		<property name="order" value="0" />
+		<property name="messageConverters">
+			<list>
+				<ref bean="jacksonHttpMessageConverter" />
+			</list>
+		</property>
+		<property name="errorResolver">
+			<bean class="vn.gmostore.api.exhandler.DefaultRestErrorResolver">
+				<property name="localeResolver" ref="localeResolver" />
+				<property name="defaultMoreInfoUrl" value="mailto:support@gmostore.vn" />
+				<property name="exceptionMappingDefinitions">
+					<map>
+						<!-- 404 -->
+						<entry key="vn.gmostore.api.exception.UnknownResourceException"
+							value="404, _exmsg" />
+						<!-- 500 (catch all): -->
+						<entry key="Throwable" value="500" />
+					</map>
+				</property>
+			</bean>
+		</property>
+	</bean>
 
 	<mvc:default-servlet-handler />
 
 
 	<!-- Cache config -->
-<!-- 	<cache:annotation-driven cache-manager="apiCacheManager"/> -->
+	<ehcache:annotation-driven cache-manager="apiCacheManager"
+		self-populating-cache-scope="shared" create-missing-caches="true" />
 
-<!-- 	<bean id="apiCacheManager" -->
-<!-- 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"> -->
-<!-- 		<property name="configLocation"> -->
-<!-- 			<value>classpath:api-ehcache.xml</value> -->
-<!-- 		</property> -->
-<!-- 		<property name="shared"> -->
-<!-- 			<value>true</value> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<bean id="apiCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:api-ehcache.xml" />
+		<property name="shared" value="true" />
+	</bean>
 
-<!-- 	<bean id="methodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean"> -->
-<!-- 		<property name="apiCacheManager"> -->
-<!-- 			<ref local="apiCacheManager" /> -->
-<!-- 		</property> -->
-<!-- 		<property name="cacheName"> -->
-<!-- 			<value>products</value> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<bean id="keyGenerator"
+		class="vn.gmostore.api.util.FirstMethodParamIdHashCodeKeyGenerator" />
 
 	<tx:annotation-driven />
 
@@ -61,32 +132,7 @@
 		</tx:attributes>
 	</tx:advice>
 
-	<!--Basic application beans. -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="mediaTypes">
-			<map>
-				<entry key="html" value="text/html"></entry>
-				<entry key="json" value="application/json"></entry>
-				<entry key="xml" value="application/xml"></entry>
-			</map>
-		</property>
-		<property name="viewResolvers">
-			<bean
-				class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-				<property name="prefix" value="/WEB-INF/jsp/"></property>
-				<property name="suffix" value=".jsp"></property>
-			</bean>
-		</property>
-		<property name="defaultViews">
-			<bean
-				class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
-				<property name="extractValueFromSingleKeyModel" value="true" />
-			</bean>
-		</property>
-	</bean>
-
 	<import resource="classpath:datastore-config.xml" />
 	<import resource="classpath:business-config.xml" />
-	<import resource="classpath:spring-security.xml" />
+	<!-- <import resource="classpath:spring-security.xml" /> -->
 </beans>

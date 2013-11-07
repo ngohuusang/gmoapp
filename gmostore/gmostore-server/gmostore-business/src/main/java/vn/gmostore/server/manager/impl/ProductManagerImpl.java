@@ -33,18 +33,9 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
-    public List<Product> getProducts(int offset, int limit) {
-        List<Product> products = productDao.getProducts(offset, limit);
-        if (products != null) {
-            return products;
-        }
+    public List<Product> getProducts(Integer platformId, Integer categoryId, int offset, int limit, String orderBy, String orderType) {
 
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<Product> getProducts() {
-        List<Product> products = productDao.getProducts();
+        List<Product> products = productDao.getProducts(platformId, categoryId, offset, limit, orderBy, orderType);
         if (products != null) {
             return products;
         }
@@ -68,7 +59,13 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
-    public void delete(Product product) {
-        productDao.delete(product);
+    public void delete(Integer productId) {
+        productDao.delete(productId);
     }
+
+    @Override
+    public Integer getProductsCount(Integer platformId, Integer categoryId) {
+        return productDao.getProductsCount(platformId,categoryId);
+    }
+
 }

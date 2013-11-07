@@ -27,6 +27,9 @@ import org.springframework.util.Assert;
 import vn.gmostore.server.dao.AbstractDao;
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E, I> {
+    
+    protected static final int DEFAULT_OFFSET = 0;
+    protected static final int DEFAULT_LIMIT = 1000;
 
     protected abstract Class<E> getEntityClass();
 
@@ -65,7 +68,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     @SuppressWarnings("unchecked")
     @Override
-    //TODO: implement code to get object with delete_date == null
     public E findById(I id) {
         return (E) getCurrentSession().get(getEntityClass(), id);
     }
@@ -79,7 +81,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    //TODO: implement delete by set delete_date = current
     public void delete(E e) {
         getCurrentSession().delete(e);
     }
@@ -87,25 +88,8 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @SuppressWarnings("unchecked")
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code to get object with delete_date == null
-    public List<E> findByCriteria(Criterion criterion) {
-        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
-        if (criterion != null)
-            criteria.add(criterion);
-        return criteria.list();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code to get object with delete_date == null
-    public List<E> findByCriteria(Criterion criterion, int offset, int limit) {
-        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
-        criteria.setFirstResult(offset);
-        criteria.setMaxResults(limit);
-        if (criterion != null)
-            criteria.add(criterion);
-
+    public List<E> findByCriteria(Criteria criteria) {
+        Assert.notNull(criteria, "Criteria must not be null");
         return criteria.list();
     }
 
@@ -119,12 +103,10 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code to get object with delete_date == null
-    public Integer findCountByCriteria(final Criterion criterion) throws DataAccessException {
-        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
-        if (criterion != null)
-            criteria.add(criterion);
+    public Integer findCountByCriteria(Criteria criteria) throws DataAccessException {
+
         criteria.setProjection(Projections.rowCount());
+
         Object result = criteria.uniqueResult();
 
         if (result == null) {
@@ -137,7 +119,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     @SuppressWarnings("unchecked")
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code to get object with delete_date == null
     public List<E> findByQueryString(String queryString) throws DataAccessException {
         Assert.notNull(queryString, "Query string cannot be null!");
         Query query = getCurrentSession().createQuery(queryString);
@@ -147,7 +128,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     @SuppressWarnings("unchecked")
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code to get object with delete_date == null
     public E bySimpleNaturalId(Object value) throws DataAccessException {
         Assert.notNull(value, "Value parameter cannot be null");
         return (E) getCurrentSession().bySimpleNaturalId(getEntityClass()).load(value);
@@ -156,9 +136,7 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     @SuppressWarnings("unchecked")
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    //TODO: implement code for axact
-    //TODO: implement code to get object with delete_date == null
-    public List<E> search(String text, boolean axact, String... columnNames) throws DataAccessException {
+    public List<E> searchBy(String text, String... columnNames) throws DataAccessException {
         FullTextSession fullTextSession = Search.getFullTextSession(getCurrentSession());
 
         QueryBuilder queryBuilder = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(getEntityClass()).get();
@@ -170,4 +148,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
         return fullTextQuery.list();
     }
+
+    protected abstract Criteria createCriteria();
 }

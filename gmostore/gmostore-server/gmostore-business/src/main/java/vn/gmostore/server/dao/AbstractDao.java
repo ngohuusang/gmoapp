@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -84,18 +85,7 @@ public interface AbstractDao<E, I extends Serializable> {
      * @return The number of results of the query.
      * @throws DataAccessException
      */
-    public Integer findCountByCriteria(Criterion criterion) throws DataAccessException;
-
-    /**
-     * Retrieves all the domain objects matching the Hibernate criteria.
-     * 
-     * @param hibernateCriteria
-     *            the criteria that the result has to fulfill
-     * @return all object that fulfill the criteria
-     * @throws DataAccessException
-     * 
-     */
-    public List<E> findByCriteria(Criterion criterion) throws DataAccessException;
+    public Integer findCountByCriteria(Criteria criteria) throws DataAccessException;
 
     /**
      * Retrieves all the domain objects matching the Hibernate criteria with
@@ -106,7 +96,7 @@ public interface AbstractDao<E, I extends Serializable> {
      * @return all object that fulfill the criteria by pagination
      * @throws DataAccessException
      * */
-    public List<E> findByCriteria(Criterion criterion, int pageNumber, int pageSize) throws DataAccessException;
+    public List<E> findByCriteria(Criteria criteria) throws DataAccessException;
 
     /**
      * Execute an HQL query, binding a number of values to "?" parameters. E.g
@@ -162,5 +152,6 @@ public interface AbstractDao<E, I extends Serializable> {
      * @return
      * @throws DataAccessException
      */
-    public List<E> search(String text, boolean exact, String... columnNames) throws DataAccessException;
+    public List<E> searchBy(String text, String... columnNames) throws DataAccessException;
+
 }

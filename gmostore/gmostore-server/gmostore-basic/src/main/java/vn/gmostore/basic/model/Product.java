@@ -55,7 +55,7 @@ public class Product extends AbstractDomain<Integer> implements Result {
     private String icon;
     private String status;
     private String videoUrl;
-    private Boolean recommand;
+    private Boolean recommend;
     private int viewCount;
     private int sharedCount;
     private long createDate;
@@ -100,7 +100,7 @@ public class Product extends AbstractDomain<Integer> implements Result {
     }
 
     public Product(Platform platform, Publisher publisher, Category category, String fullName, String packageName, String currentVersion, String promotionText,
-            String promotionImageUrl, String description, String recentChange, String icon, String status, String videoUrl, Boolean recommand, int viewCount,
+            String promotionImageUrl, String description, String recentChange, String icon, String status, String videoUrl, Boolean recommend, int viewCount,
             int sharedCount, long createDate, Long updateDate, Long deleteDate, Set<ScreenShot> screenShots, Set<WishList> wishLists, Set<Rating> ratings,
             Set<Price> prices, Set<HistoryTransaction> historyTransactions, Set<HistoryAction> historyActions, Set<Promotion> promotions,
             Set<Version> versions, Set<Comment> comments, Set<ListTypeHasProduct> listTypeHasProducts) {
@@ -117,7 +117,7 @@ public class Product extends AbstractDomain<Integer> implements Result {
         this.icon = icon;
         this.status = status;
         this.videoUrl = videoUrl;
-        this.recommand = recommand;
+        this.recommend = recommend;
         this.viewCount = viewCount;
         this.sharedCount = sharedCount;
         this.createDate = createDate;
@@ -269,12 +269,12 @@ public class Product extends AbstractDomain<Integer> implements Result {
     }
 
     @Column(name = "recommand")
-    public Boolean getRecommand() {
-        return this.recommand;
+    public Boolean getRecommend() {
+        return this.recommend;
     }
 
-    public void setRecommand(Boolean recommand) {
-        this.recommand = recommand;
+    public void setRecommend(Boolean recommend) {
+        this.recommend = recommend;
     }
 
     @Column(name = "view_count", nullable = false)

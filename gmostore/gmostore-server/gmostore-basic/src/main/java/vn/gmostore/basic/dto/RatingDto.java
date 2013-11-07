@@ -1,6 +1,10 @@
 package vn.gmostore.basic.dto;
 
 public class RatingDto implements Dto {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private int point;
     private Long ratedDate;

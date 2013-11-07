@@ -12,6 +12,7 @@ import vn.gmostore.basic.dto.ProductDetailDto;
 import vn.gmostore.basic.dto.ProductDto;
 import vn.gmostore.basic.model.Product;
 import vn.gmostore.server.manager.ProductManager;
+import vn.gmostore.server.manager.RatingManager;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -19,8 +20,11 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductManager productManager;
 
+    @Autowired
+    RatingManager ratingManager;
+
     @Override
-    public ProductDetailDto getProductDetailsBy(Integer id) {
+    public ProductDetailDto getProductDetailsBy(Integer platformId, Integer id) {
         if (id != null) {
             Product product = productManager.getById(id);
             return new ProductDetailDto(product);
@@ -29,12 +33,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getProducts(int offset, int limit) {
+    public List<ProductDto> getProducts(Integer platformId, Integer categoryId, int offset, int limit, String orderBy, String orderType) {
         if (offset >= 0 && limit >= 0) {
-            List<Product> products = productManager.getProducts(offset, limit);
+            List<Product> products = productManager.getProducts(platformId, categoryId, offset, limit, orderBy, orderType);
             List<ProductDto> result = new ArrayList<ProductDto>(products.size());
             for (Product product : products) {
-                result.add(new ProductDto(product));
+                ProductDto productDto = new ProductDto(product);
+                int ratedPoint = ratingManager.getAverage(product.getId());
+                productDto.setRatedPoint(ratedPoint);
+
+                result.add(productDto);
             }
             return result;
         }
@@ -43,22 +51,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Integer getProductsCount() {
-        return 0;
+    public Integer getProductsCount(Integer platformId, Integer categoryId) {
+        return productManager.getProductsCount(platformId, categoryId);
     }
 
     @Override
     public ProductDetailDto saveOrCreate(ProductDetailDto product) {
         //        if (product != null)
-        //            productManager.saveOrUpdate(product, true);
+        //            productManager.saveOrUpdate(product, true);//TODO
         return null;
     }
 
     @Override
     public void delete(Integer productId) {
         if (productId != null) {
-            Product product = productManager.getById(productId);
-            productManager.delete(product);
+            productManager.delete(productId);
         }
 
     }

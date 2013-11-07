@@ -4,6 +4,10 @@ import vn.gmostore.basic.model.User;
 
 public class CurrentUserDto implements Dto {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     Boolean loggedIn;
     User user;
 
