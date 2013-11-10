@@ -8,7 +8,7 @@
 
             <div>
                 <g:InlineLabel>Your rating:</g:InlineLabel>
-                <g:IntegerBox ui:field="rating" maxLength="3" debugId="ratingInput"/>
+                <g:IntegerBox ui:field="mark" maxLength="3" debugId="ratingInput"/>
             </div>
 
             <div>

@@ -10,6 +10,8 @@ public class GetResult<T extends Dto> implements Result {
      */
     private static final long serialVersionUID = 1L;
 
+    int status = 200;//HttpStatus.OK
+
     T result;
 
     protected GetResult() {
@@ -19,7 +21,16 @@ public class GetResult<T extends Dto> implements Result {
         this.result = result;
     }
 
+    public GetResult(T result, int statusCode) {
+        this.result = result;
+        this.status = statusCode;
+    }
+
     public T getResult() {
         return result;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

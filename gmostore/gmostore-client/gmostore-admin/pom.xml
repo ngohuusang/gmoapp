@@ -85,14 +85,14 @@
                 </executions>
             </plugin>
 
-<!--             <plugin> -->
-<!--                 <groupId>org.apache.maven.plugins</groupId> -->
-<!--                 <artifactId>maven-checkstyle-plugin</artifactId> -->
-<!--                 <version>${maven-checkstyle-plugin.version}</version> -->
-<!--                 <configuration> -->
-<!--                     <skip>true</skip> -->
-<!--                 </configuration> -->
-<!--             </plugin>            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>5.6</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>           
         </plugins>
     </build>
 
@@ -101,21 +101,6 @@
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-mvp-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-dispatch-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-dispatch-rest</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-dispatch-shared</artifactId>
         </dependency>
 
         <!-- GWT -->
@@ -173,33 +158,55 @@
             <artifactId>jbcrypt</artifactId>
         </dependency>
 		
-        <dependency>
-            <groupId>com.arcbees</groupId>
-            <artifactId>guicy-resteasy</artifactId>
-        </dependency>
+    <dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-bundle</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.fusesource.restygwt</groupId>
+			<artifactId>restygwt</artifactId>
+			<version>${restygwt.version}</version>
+		</dependency>
 
-        <!-- REST -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-guice</artifactId>
-        </dependency>    
-        
-        <!-- Include basic package -->
-        <dependency>
+		<!-- Include basic package -->
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>gmostore-basic</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.sf.ehcache</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>mysql</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.jolbox</groupId>
+					<artifactId>bonecp-spring</artifactId>
+				</exclusion>
+			</exclusions>
 			<scope>compile</scope>
-		</dependency>   
-
+		</dependency>
         <!-- JUnit Testing -->
         <dependency>
             <groupId>org.jukito</groupId>

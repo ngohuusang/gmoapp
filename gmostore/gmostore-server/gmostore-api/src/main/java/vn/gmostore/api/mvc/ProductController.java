@@ -1,6 +1,8 @@
 package vn.gmostore.api.mvc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,8 +31,8 @@ public class ProductController {
     //    @TriggersRemove(cacheName="infoCache", keyGeneratorName="infoKeyGenerator")//TODO: update, delete, insert
 
     @RequestMapping(value = "platforms/{platfomId}/products/{id}",//
-    method = RequestMethod.GET,// Only response on GET
-    consumes = MediaType.APPLICATION_JSON_VALUE //Need to set Header: "Content-Type: application/json" to get right content type
+    method = RequestMethod.GET// Only response on GET
+    //    consumes = MediaType.APPLICATION_JSON_VALUE //Need to set Header: "Content-Type: application/json" to get right content type
     )
     @Cacheable(cacheName = "productCache", keyGeneratorName = "keyGenerator")
     @ResponseBody
@@ -68,6 +70,29 @@ public class ProductController {
 
         //        return new GetResults<ProductDto>(productDtos);
         return null;
+    }
+
+    @RequestMapping(value = "/products",//
+    //    params = { "offset", "limit", "orderBy", "category", "orderType" },//
+    method = RequestMethod.GET,//
+    consumes = MediaType.APPLICATION_JSON_VALUE)
+    //    @Cacheable(cacheName = "productsCache", keyGeneratorName = "keyGenerator")
+    //TODO: Cache
+    @ResponseBody
+    public GetResults<ProductDto> getProducts(//
+    //            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_OFFSET)
+    //            int offset,//
+    //            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_LIMIT)
+    //            int limit) {
+    ) {
+        //        List<ProductDto> productDtos = productService.getProducts(platfomId, category, offset, limit, orderBy, orderType);
+
+        //        return new GetResults<ProductDto>(productDtos);
+        ProductDto dto = new ProductDto();
+        dto.setFullName("Sang");
+        List<ProductDto> dtos = new ArrayList<ProductDto>();
+        dtos.add(dto);
+        return new GetResults<ProductDto>(dtos);
     }
 
 }

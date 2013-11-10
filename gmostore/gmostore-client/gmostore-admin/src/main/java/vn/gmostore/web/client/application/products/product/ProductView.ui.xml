@@ -4,7 +4,7 @@
         <g:HTMLPanel>
             <div>
                 <g:InlineLabel>Model:</g:InlineLabel>
-                <g:TextBox ui:field="model" debugId="car-model-input"/>
+                <g:TextBox ui:field="fullName" debugId="car-model-input"/>
             </div>
 
             <div>

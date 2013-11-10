@@ -28,7 +28,7 @@ public class EditRatingView extends PopupViewWithUiHandlers<EditRatingUiHandlers
     }
 
     @UiField
-    IntegerBox rating;
+    IntegerBox mark;
     @UiField(provided = true)
     ValueListBox<ProductDto> product;
 
@@ -57,8 +57,8 @@ public class EditRatingView extends PopupViewWithUiHandlers<EditRatingUiHandlers
 
     @Override
     public void setAllowedCars(List<ProductDto> products) {
-        product.setValue(products.isEmpty() ? null : products.get(0));
-        product.setAcceptableValues(products);
+        //        product.setValue(products.isEmpty() ? null : products.get(0));
+        //        product.setAcceptableValues(products);
     }
 
     @UiHandler("save")

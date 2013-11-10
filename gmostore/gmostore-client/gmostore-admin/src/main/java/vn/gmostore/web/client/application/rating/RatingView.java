@@ -5,7 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import vn.gmostore.basic.dto.RatingDto;
-import vn.gmostore.web.client.application.rating.ui.RatingColumnsDefinition;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
@@ -32,12 +31,12 @@ public class RatingView extends ViewWithUiHandlers<RatingUiHandlers> implements 
     @UiField(provided = true)
     CellTable<RatingDto> ratingGrid;
 
-    private final RatingColumnsDefinition ratingColumnInitializer;
+    //    private final RatingColumnsDefinition ratingColumnInitializer;
     private final ListDataProvider<RatingDto> ratingDataProvider;
 
     @Inject
-    RatingView(Binder uiBinder, RatingColumnsDefinition ratingColumnInitializer) {
-        this.ratingColumnInitializer = ratingColumnInitializer;
+    RatingView(Binder uiBinder) {
+        //        this.ratingColumnInitializer = ratingColumnInitializer;
 
         initRatingGrid();
 
@@ -72,7 +71,7 @@ public class RatingView extends ViewWithUiHandlers<RatingUiHandlers> implements 
         ratingGrid = new CellTable<RatingDto>();
         ratingGrid.setSelectionModel(new NoSelectionModel<RatingDto>());
 
-        ratingColumnInitializer.initializeColumns(ratingGrid);
+        //        ratingColumnInitializer.initializeColumns(ratingGrid);
         initActionColumns();
     }
 

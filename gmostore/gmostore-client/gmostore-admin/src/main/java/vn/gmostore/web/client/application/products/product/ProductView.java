@@ -23,7 +23,7 @@ public class ProductView extends ViewWithUiHandlers<ProductUiHandlers> implement
     }
 
     @UiField
-    TextBox model;
+    TextBox fullName;
     //    @UiField(provided = true)
     //    ValueListBox<ManufacturerDto> manufacturer;
     //    @UiField

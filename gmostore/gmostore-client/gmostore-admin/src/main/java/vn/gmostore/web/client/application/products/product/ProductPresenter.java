@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.gmostore.basic.dispatch.GetResult;
 import vn.gmostore.basic.dto.ProductDetailDto;
 import vn.gmostore.web.client.application.event.ActionBarEvent;
 import vn.gmostore.web.client.application.event.ChangeActionBarEvent;
@@ -19,14 +18,10 @@ import vn.gmostore.web.client.application.widget.message.Message;
 import vn.gmostore.web.client.application.widget.message.MessageStyle;
 import vn.gmostore.web.client.place.NameTokens;
 import vn.gmostore.web.client.resources.ProductMessages;
-import vn.gmostore.web.client.rest.ProductService;
-import vn.gmostore.web.client.util.ErrorHandlerAsyncCallback;
 
 import com.google.gwt.user.client.Window;
 import com.google.inject.assistedinject.Assisted;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
-import com.gwtplatform.dispatch.shared.NoResult;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -50,23 +45,23 @@ public class ProductPresenter extends Presenter<ProductPresenter.MyView, Product
 
     }
 
-    private final ProductService productService;
+    //    private final ProductService productService;
     private final ProductMessages messages;
-    private final DispatchAsync dispatcher;
+    //    private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final ProductProxyFactory productProxyFactory;
 
     private ProductDetailDto product;
 
     @Inject
-    public ProductPresenter(EventBus eventBus, MyView view, DispatchAsync dispatcher, ProductService productService, PlaceManager placeManager,
-            ProductProxyFactory productProxyFactory, ProductMessages messages, @Assisted
+    public ProductPresenter(EventBus eventBus, MyView view, PlaceManager placeManager, ProductProxyFactory productProxyFactory, ProductMessages messages,
+            @Assisted
             MyProxy proxy, @Assisted
             ProductDetailDto product) {
         super(eventBus, view, proxy);
 
-        this.dispatcher = dispatcher;
-        this.productService = productService;
+        //        this.dispatcher = dispatcher;
+        //        this.productService = productService;
         this.messages = messages;
         this.placeManager = placeManager;
         this.productProxyFactory = productProxyFactory;
@@ -102,12 +97,12 @@ public class ProductPresenter extends Presenter<ProductPresenter.MyView, Product
 
     @Override
     public void onSave(final ProductDetailDto product) {
-        dispatcher.execute(productService.saveOrCreate(product), new ErrorHandlerAsyncCallback<GetResult<ProductDetailDto>>(this) {
-            @Override
-            public void onSuccess(GetResult<ProductDetailDto> result) {
-                onProductSaved(product, result.getResult());
-            }
-        });
+        //        dispatcher.execute(productService.saveOrCreate(product), new ErrorHandlerAsyncCallback<GetResult<ProductDetailDto>>(this) {
+        //            @Override
+        //            public void onSuccess(GetResult<ProductDetailDto> result) {
+        //                onProductSaved(product, result.getResult());
+        //            }
+        //        });
     }
 
     @Override
@@ -184,12 +179,12 @@ public class ProductPresenter extends Presenter<ProductPresenter.MyView, Product
     private void onDeleteProduct() {
         Boolean confirm = Window.confirm("Are you sure you want to delete " + product.getFullName() + "?");
         if (confirm) {
-            dispatcher.execute(productService.delete(product.getId()), new ErrorHandlerAsyncCallback<NoResult>(this) {
-                @Override
-                public void onSuccess(NoResult noResult) {
-                    NavigationTabEvent.fireClose(ProductPresenter.this, ProductPresenter.this);
-                }
-            });
+            //            dispatcher.execute(productService.delete(product.getId()), new ErrorHandlerAsyncCallback<NoResult>(this) {
+            //                @Override
+            //                public void onSuccess(NoResult noResult) {
+            //                    NavigationTabEvent.fireClose(ProductPresenter.this, ProductPresenter.this);
+            //                }
+            //            });
         }
     }
 }

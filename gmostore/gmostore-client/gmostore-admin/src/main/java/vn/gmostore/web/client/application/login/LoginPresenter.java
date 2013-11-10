@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import vn.gmostore.basic.dispatch.GetResults;
-import vn.gmostore.basic.dto.ActionType;
+import org.fusesource.restygwt.client.Method;
+import org.fusesource.restygwt.client.MethodCallback;
+
+import vn.gmostore.basic.dispatch.GetResult;
 import vn.gmostore.basic.dto.CurrentUserDto;
-import vn.gmostore.basic.dto.ProductDto;
+import vn.gmostore.basic.dto.PlatformDto;
 import vn.gmostore.web.client.application.ApplicationPresenter;
 import vn.gmostore.web.client.application.event.ActionBarVisibilityEvent;
 import vn.gmostore.web.client.application.event.DisplayMessageEvent;
@@ -16,21 +18,17 @@ import vn.gmostore.web.client.application.widget.message.Message;
 import vn.gmostore.web.client.application.widget.message.MessageStyle;
 import vn.gmostore.web.client.place.NameTokens;
 import vn.gmostore.web.client.resources.LoginMessages;
-import vn.gmostore.web.client.rest.ProductService;
-import vn.gmostore.web.client.rest.SessionService;
+import vn.gmostore.web.client.rest.ProductResourceAsync;
 import vn.gmostore.web.client.security.CurrentUser;
 import vn.gmostore.web.shared.dispatch.LogInRequest;
-import vn.gmostore.web.shared.dispatch.LogInResult;
 
 import com.google.common.base.Strings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -57,23 +55,25 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
 
     private static final Logger logger = Logger.getLogger(LoginPresenter.class.getName());
     private final PlaceManager placeManager;
-    private final DispatchAsync dispatchAsync;
-    private final SessionService sessionService;
-    private final ProductService productService;
+    //    private final DispatchAsync dispatchAsync;
+    //    private final SessionService sessionService;
+    //    private final ProductService productService;
+    private final ProductResourceAsync productResourceAsync;
     private final CurrentUser currentUser;
     private final LoginMessages messages;
 
     @Inject
-    LoginPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager, DispatchAsync dispatchAsync, SessionService sessionService,
-            ProductService productService, CurrentUser currentUser, LoginMessages messages) {
+    LoginPresenter(EventBus eventBus, MyView view, MyProxy proxy, PlaceManager placeManager, CurrentUser currentUser, LoginMessages messages,
+            ProductResourceAsync productResourceAsync) {
         super(eventBus, view, proxy);
 
         this.placeManager = placeManager;
-        this.dispatchAsync = dispatchAsync;
-        this.sessionService = sessionService;
+        //        this.dispatchAsync = dispatchAsync;
+        //        this.sessionService = sessionService;
         this.currentUser = currentUser;
         this.messages = messages;
-        this.productService = productService;
+        //        this.productService = productService;
+        this.productResourceAsync = productResourceAsync;
 
         getView().setUiHandlers(this);
     }
@@ -99,44 +99,61 @@ public class LoginPresenter extends Presenter<LoginPresenter.MyView, LoginPresen
     }
 
     private void callServerLoginAction(LogInRequest loginRequest) {
-        dispatchAsync.execute(productService.getProducts(), new AsyncCallback<GetResults<ProductDto>>() {
+        productResourceAsync.getById(2, new MethodCallback<GetResult<PlatformDto>>() {
+
             @Override
-            public void onFailure(Throwable e) {
+            public void onSuccess(Method method, GetResult<PlatformDto> response) {
+                Window.alert("Product " + response.getResult());
+
+            }
+
+            @Override
+            public void onFailure(Method method, Throwable e) {
                 DisplayMessageEvent.fire(LoginPresenter.this, new Message(messages.unableToContactServer(), MessageStyle.ERROR));
 
                 logger.log(Level.SEVERE, "callServerLoginAction(): Server failed to process login call.", e);
                 e.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(GetResults<ProductDto> result) {
-                Window.alert("Product " + result.getResults().isEmpty());
 
             }
         });
+        //        dispatchAsync.execute(productService.getProducts(), new AsyncCallback<GetResults<ProductDto>>() {
+        //            @Override
+        //            public void onFailure(Throwable e) {
+        //                DisplayMessageEvent.fire(LoginPresenter.this, new Message(messages.unableToContactServer(), MessageStyle.ERROR));
+        //
+        //                logger.log(Level.SEVERE, "callServerLoginAction(): Server failed to process login call.", e);
+        //                e.printStackTrace();
+        //            }
+        //
+        //            @Override
+        //            public void onSuccess(GetResults<ProductDto> result) {
+        //                Window.alert("Product " + result.getResults().isEmpty());
+        //
+        //            }
+        //        });
 
-        dispatchAsync.execute(sessionService.login(loginRequest), new AsyncCallback<LogInResult>() {
-            @Override
-            public void onFailure(Throwable e) {
-                DisplayMessageEvent.fire(LoginPresenter.this, new Message(messages.unableToContactServer(), MessageStyle.ERROR));
-
-                logger.log(Level.SEVERE, "callServerLoginAction(): Server failed to process login call.", e);
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(LogInResult result) {
-                if (result.getCurrentUserDto().isLoggedIn()) {
-                    setLoggedInCookie(result.getLoggedInCookie());
-                }
-
-                if (result.getActionType() == ActionType.VIA_COOKIE) {
-                    onLoginCallSucceededForCookie(result.getCurrentUserDto());
-                } else {
-                    onLoginCallSucceeded(result.getCurrentUserDto());
-                }
-            }
-        });
+        //        dispatchAsync.execute(sessionService.login(loginRequest), new AsyncCallback<LogInResult>() {
+        //            @Override
+        //            public void onFailure(Throwable e) {
+        //                DisplayMessageEvent.fire(LoginPresenter.this, new Message(messages.unableToContactServer(), MessageStyle.ERROR));
+        //
+        //                logger.log(Level.SEVERE, "callServerLoginAction(): Server failed to process login call.", e);
+        //                e.printStackTrace();
+        //            }
+        //
+        //            @Override
+        //            public void onSuccess(LogInResult result) {
+        //                if (result.getCurrentUserDto().isLoggedIn()) {
+        //                    setLoggedInCookie(result.getLoggedInCookie());
+        //                }
+        //
+        //                if (result.getActionType() == ActionType.VIA_COOKIE) {
+        //                    onLoginCallSucceededForCookie(result.getCurrentUserDto());
+        //                } else {
+        //                    onLoginCallSucceeded(result.getCurrentUserDto());
+        //                }
+        //            }
+        //        });
     }
 
     private void onLoginCallSucceededForCookie(CurrentUserDto currentUserDto) {

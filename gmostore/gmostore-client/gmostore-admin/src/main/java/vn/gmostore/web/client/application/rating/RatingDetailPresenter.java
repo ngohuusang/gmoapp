@@ -5,30 +5,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.gmostore.basic.dispatch.GetResult;
-import vn.gmostore.basic.dispatch.GetResults;
 import vn.gmostore.basic.dto.ProductDto;
 import vn.gmostore.basic.dto.RatingDto;
 import vn.gmostore.web.client.application.ApplicationPresenter;
 import vn.gmostore.web.client.application.event.ActionBarEvent;
 import vn.gmostore.web.client.application.event.ChangeActionBarEvent;
 import vn.gmostore.web.client.application.event.ChangeActionBarEvent.ActionType;
-import vn.gmostore.web.client.application.event.DisplayMessageEvent;
 import vn.gmostore.web.client.application.event.GoBackEvent;
 import vn.gmostore.web.client.application.rating.RatingDetailPresenter.MyProxy;
 import vn.gmostore.web.client.application.rating.RatingDetailPresenter.MyView;
-import vn.gmostore.web.client.application.widget.message.Message;
-import vn.gmostore.web.client.application.widget.message.MessageStyle;
 import vn.gmostore.web.client.place.NameTokens;
 import vn.gmostore.web.client.resources.EditRatingMessages;
-import vn.gmostore.web.client.rest.ProductService;
-import vn.gmostore.web.client.rest.RatingService;
 import vn.gmostore.web.client.security.LoggedInGatekeeper;
-import vn.gmostore.web.client.util.AbstractAsyncCallback;
-import vn.gmostore.web.client.util.ErrorHandlerAsyncCallback;
 
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -57,20 +47,19 @@ public class RatingDetailPresenter extends Presenter<MyView, MyProxy> implements
     public interface MyProxy extends ProxyPlace<RatingDetailPresenter> {
     }
 
-    private final DispatchAsync dispatcher;
-    private final ProductService productService;
-    private final RatingService ratingService;
+    //    private final DispatchAsync dispatcher;
+    //    private final ProductService productService;
+    //    private final RatingService ratingService;
     private final EditRatingMessages messages;
     private final PlaceManager placeManager;
 
     @Inject
-    RatingDetailPresenter(EventBus eventBus, MyView view, MyProxy proxy, DispatchAsync dispatcher, ProductService productService, RatingService ratingService,
-            EditRatingMessages messages, PlaceManager placeManager) {
+    RatingDetailPresenter(EventBus eventBus, MyView view, MyProxy proxy, EditRatingMessages messages, PlaceManager placeManager) {
         super(eventBus, view, proxy);
-
-        this.dispatcher = dispatcher;
-        this.productService = productService;
-        this.ratingService = ratingService;
+        //
+        //        this.dispatcher = dispatcher;
+        //        this.productService = productService;
+        //        this.ratingService = ratingService;
         this.messages = messages;
         this.placeManager = placeManager;
 
@@ -91,13 +80,13 @@ public class RatingDetailPresenter extends Presenter<MyView, MyProxy> implements
 
     @Override
     public void onSave(RatingDto rating) {
-        dispatcher.execute(ratingService.saveOrCreate(rating), new ErrorHandlerAsyncCallback<GetResult<RatingDto>>(this) {
-            @Override
-            public void onSuccess(GetResult<RatingDto> result) {
-                DisplayMessageEvent.fire(RatingDetailPresenter.this, new Message(messages.ratingSaved(), MessageStyle.SUCCESS));
-                placeManager.revealPlace(new Builder().nameToken(NameTokens.getRating()).build());
-            }
-        });
+        //        dispatcher.execute(ratingService.saveOrCreate(rating), new ErrorHandlerAsyncCallback<GetResult<RatingDto>>(this) {
+        //            @Override
+        //            public void onSuccess(GetResult<RatingDto> result) {
+        //                DisplayMessageEvent.fire(RatingDetailPresenter.this, new Message(messages.ratingSaved(), MessageStyle.SUCCESS));
+        //                placeManager.revealPlace(new Builder().nameToken(NameTokens.getRating()).build());
+        //            }
+        //        });
     }
 
     @Override
@@ -111,12 +100,12 @@ public class RatingDetailPresenter extends Presenter<MyView, MyProxy> implements
         List<ActionType> actions = Arrays.asList(ActionType.DONE);
         ChangeActionBarEvent.fire(this, actions, false);
 
-        dispatcher.execute(productService.getProducts(), new AbstractAsyncCallback<GetResults<ProductDto>>() {
-            @Override
-            public void onSuccess(GetResults<ProductDto> result) {
-                onGetCarsSuccess(result.getResults());
-            }
-        });
+        //        dispatcher.execute(productService.getProducts(), new AbstractAsyncCallback<GetResults<ProductDto>>() {
+        //            @Override
+        //            public void onSuccess(GetResults<ProductDto> result) {
+        //                onGetCarsSuccess(result.getResults());
+        //            }
+        //        });
     }
 
     @Override

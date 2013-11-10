@@ -37,6 +37,7 @@ public class PlatformController {
     public GetResult<PlatformDto> getPlatformById(//
             @PathVariable
             Long id) throws IOException {
+
         PlatformDto platformDto = platformService.getBy(id.intValue());
 
         return new GetResult<PlatformDto>(platformDto);
@@ -51,11 +52,16 @@ public class PlatformController {
     @ResponseBody
     public GetResults<PlatformDto> getPlatforms(//
             @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_OFFSET)
-            int offset,//
+            Long offset,//
             @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_LIMIT)
-            int limit) {
-
-        List<PlatformDto> platformDtos = platformService.getPlatforms(offset, limit);
+            Long limit) {
+        if (offset == null) {
+            offset = Long.valueOf(ApiConstants.DEFAULT_OFFSET);
+        }
+        if (limit == null) {
+            limit = Long.valueOf(ApiConstants.DEFAULT_LIMIT);
+        }
+        List<PlatformDto> platformDtos = platformService.getPlatforms(offset.intValue(), limit.intValue());
 
         return new GetResults<PlatformDto>(platformDtos);
     }
@@ -89,7 +95,7 @@ public class PlatformController {
     @ResponseBody
     public GetResult<PlatformDto> updateEmp(@RequestBody
     PlatformDto platformDto, @PathVariable
-    String id) {
+    Long id) {
         PlatformDto dto = platformService.saveOrCreate(platformDto);
 
         return new GetResult<PlatformDto>(dto);

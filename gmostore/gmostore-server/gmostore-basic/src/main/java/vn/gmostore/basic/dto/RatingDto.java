@@ -9,6 +9,7 @@ public class RatingDto implements Dto {
     private int point;
     private Long ratedDate;
     private int mark;
+    private ProductDto product;
 
     public Integer getId() {
         return id;
@@ -40,5 +41,13 @@ public class RatingDto implements Dto {
 
     public void setMark(int mark) {
         this.mark = mark;
+    }
+
+    public ProductDto getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductDto product) {
+        this.product = product;
     }
 }

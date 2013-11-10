@@ -6,7 +6,6 @@ public class ProductDto implements Dto {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
 
     protected Integer id;
     protected String fullName;
@@ -37,6 +36,28 @@ public class ProductDto implements Dto {
         this.commentCount = product.getComments().size();
         this.viewCount = product.getViewCount();
         this.sharedCount = product.getSharedCount();
+    }
+
+    public ProductDto(Integer id, String fullName, String publisher, String packageName, String currentVersion, String icon, long currentGold,
+            long currentDiamon, String downloadLink, int commentCount, int viewCount, int sharedCount, int ratedPoint, int fileSize, long createDate,
+            Long updateDate) {
+        super();
+        this.id = id;
+        this.fullName = fullName;
+        this.publisher = publisher;
+        this.packageName = packageName;
+        this.currentVersion = currentVersion;
+        this.icon = icon;
+        this.currentGold = currentGold;
+        this.currentDiamon = currentDiamon;
+        this.downloadLink = downloadLink;
+        this.commentCount = commentCount;
+        this.viewCount = viewCount;
+        this.sharedCount = sharedCount;
+        this.ratedPoint = ratedPoint;
+        this.fileSize = fileSize;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
     public ProductDto() {
@@ -169,5 +190,5 @@ public class ProductDto implements Dto {
     public void setCurrentDiamon(long currentDiamon) {
         this.currentDiamon = currentDiamon;
     }
-    
+
 }

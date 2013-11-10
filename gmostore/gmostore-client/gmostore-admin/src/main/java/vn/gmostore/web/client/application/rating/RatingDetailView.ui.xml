@@ -22,7 +22,7 @@
         </div>
 
         <div>
-            <g:IntegerBox ui:field="rating" maxLength="3" styleName="{resource.styles.mobileTextField}"
+            <g:IntegerBox ui:field="mark" maxLength="3" styleName="{resource.styles.mobileTextField}"
                           debugId="ratingInput"/>
         </div>
     </g:HTMLPanel>

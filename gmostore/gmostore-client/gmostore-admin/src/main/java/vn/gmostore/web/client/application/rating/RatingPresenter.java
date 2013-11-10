@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.gmostore.basic.dispatch.GetResults;
 import vn.gmostore.basic.dto.RatingDto;
 import vn.gmostore.web.client.application.ApplicationPresenter;
 import vn.gmostore.web.client.application.event.ActionBarEvent;
@@ -16,13 +15,9 @@ import vn.gmostore.web.client.application.rating.event.RatingAddedEvent;
 import vn.gmostore.web.client.application.rating.event.RatingAddedEvent.RatingAddedHandler;
 import vn.gmostore.web.client.application.rating.ui.EditRatingPresenter;
 import vn.gmostore.web.client.place.NameTokens;
-import vn.gmostore.web.client.rest.RatingService;
 import vn.gmostore.web.client.security.LoggedInGatekeeper;
-import vn.gmostore.web.client.util.AbstractAsyncCallback;
 
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
-import com.gwtplatform.dispatch.shared.NoResult;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -52,18 +47,17 @@ public class RatingPresenter extends Presenter<RatingPresenter.MyView, RatingPre
     public interface MyProxy extends ProxyPlace<RatingPresenter> {
     }
 
-    private final DispatchAsync dispatcher;
+    //    private final DispatchAsync dispatcher;
     private final EditRatingPresenter editRatingPresenter;
-    private final RatingService ratingService;
+    //    private final RatingService ratingService;
     private final PlaceManager placeManager;
 
     @Inject
-    RatingPresenter(EventBus eventBus, MyView view, MyProxy proxy, DispatchAsync dispatcher, RatingService ratingService,
-            EditRatingPresenter editRatingPresenter, PlaceManager placeManager) {
+    RatingPresenter(EventBus eventBus, MyView view, MyProxy proxy, EditRatingPresenter editRatingPresenter, PlaceManager placeManager) {
         super(eventBus, view, proxy);
 
-        this.dispatcher = dispatcher;
-        this.ratingService = ratingService;
+        //        this.dispatcher = dispatcher;
+        //        this.ratingService = ratingService;
         this.placeManager = placeManager;
         this.editRatingPresenter = editRatingPresenter;
 
@@ -84,12 +78,12 @@ public class RatingPresenter extends Presenter<RatingPresenter.MyView, RatingPre
 
     @Override
     public void onDelete(final RatingDto rating) {
-        dispatcher.execute(ratingService.delete(rating.getId()), new AbstractAsyncCallback<NoResult>() {
-            @Override
-            public void onSuccess(NoResult result) {
-                getView().removeRating(rating);
-            }
-        });
+        //        dispatcher.execute(ratingService.delete(rating.getId()), new AbstractAsyncCallback<NoResult>() {
+        //            @Override
+        //            public void onSuccess(NoResult result) {
+        //                getView().removeRating(rating);
+        //            }
+        //        });
     }
 
     @ProxyEvent
@@ -103,12 +97,12 @@ public class RatingPresenter extends Presenter<RatingPresenter.MyView, RatingPre
         ActionBarVisibilityEvent.fire(this, true);
         ChangeActionBarEvent.fire(this, Arrays.asList(ActionType.ADD), true);
 
-        dispatcher.execute(ratingService.getRatings(), new AbstractAsyncCallback<GetResults<RatingDto>>() {
-            @Override
-            public void onSuccess(GetResults<RatingDto> result) {
-                getView().displayRatings(result.getResults());
-            }
-        });
+        //        dispatcher.execute(ratingService.getRatings(), new AbstractAsyncCallback<GetResults<RatingDto>>() {
+        //            @Override
+        //            public void onSuccess(GetResults<RatingDto> result) {
+        //                getView().displayRatings(result.getResults());
+        //            }
+        //        });
     }
 
     @Override

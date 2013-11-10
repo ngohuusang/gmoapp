@@ -24,7 +24,7 @@ public class RatingDetailView extends ViewWithUiHandlers<RatingDetailUiHandlers>
     }
 
     @UiField
-    IntegerBox rating;
+    IntegerBox mark;
     @UiField(provided = true)
     ValueListBox<ProductDto> product;
 
@@ -40,7 +40,7 @@ public class RatingDetailView extends ViewWithUiHandlers<RatingDetailUiHandlers>
 
         driver.initialize(this);
 
-        rating.getElement().setAttribute("placeholder", "Your rating");
+        mark.getElement().setAttribute("placeholder", "Your rating");
     }
 
     @Override
