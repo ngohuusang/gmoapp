@@ -1,11 +1,12 @@
 package vn.gmostore.api.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import vn.gmostore.api.service.PlatformService;
 import vn.gmostore.basic.dto.PlatformDto;
@@ -20,39 +21,55 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     public PlatformDto getBy(Integer id) {
-        if (id != null) {
-            Platform platform = platformManager.getById(id);
-            return new PlatformDto(platform);
-        }
-        return null;
+        Platform platform = platformManager.getById(id);
+        return new PlatformDto(platform);
     }
 
     @Override
     public List<PlatformDto> getPlatforms(int offset, int limit) {
-        if (offset >= 0 && limit >= 0) {
-            List<Platform> platforms = platformManager.getPlatforms(offset, limit);
-            List<PlatformDto> result = new ArrayList<PlatformDto>(platforms.size());
-            for (Platform platform : platforms) {
-                result.add(new PlatformDto(platform));
-            }
-            return result;
+        List<Platform> platforms = platformManager.getPlatforms(offset, limit);
+        List<PlatformDto> result = new ArrayList<PlatformDto>(platforms.size());
+        for (Platform platform : platforms) {
+            result.add(new PlatformDto(platform));
         }
-
-        return Collections.emptyList();
+        return result;
     }
 
     @Override
-    public PlatformDto saveOrCreate(PlatformDto product) {
-        //        if (product != null)
-        //            platformManager.saveOrUpdate(product, true);
-        return null;
+    public PlatformDto saveOrCreate(PlatformDto platformDto) {
+        Assert.notNull(platformDto, "Platform must be not null");
+
+        Platform platform = platformDto.from();
+        if (!platform.isPersisted()) {
+            platform.setCreateDate(new Date().getTime());
+        } else {
+            platform.setUpdateDate(new Date().getTime());
+        }
+        Platform saved = platformManager.saveOrUpdate(platform, true);
+        return new PlatformDto(saved);
     }
 
     @Override
-    public void delete(Integer platformId) {
-        if (platformId != null) {
-            platformManager.delete(platformId);
-        }
+    public void delete(Integer platformId, boolean permalink) {
+        platformManager.delete(platformId, permalink);
+    }
 
+    @Override
+    public void update(PlatformDto platformDto) {
+
+        Assert.notNull(platformDto, "Platform cannot be null");
+
+        Platform platform = platformDto.from();
+        platformManager.update(platform, true);
+    }
+
+    @Override
+    public PlatformDto save(PlatformDto platformDto) {
+        Assert.notNull(platformDto, "Platform cannot be null");
+
+        Platform platform = platformDto.from();
+        Platform saved = platformManager.save(platform, true);
+
+        return new PlatformDto(saved);
     }
 }

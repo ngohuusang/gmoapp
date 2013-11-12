@@ -154,4 +154,26 @@ public interface AbstractDao<E, I extends Serializable> {
      */
     public List<E> searchBy(String text, String... columnNames) throws DataAccessException;
 
+    /**
+     * Save object to database
+     * 
+     * @param entity
+     * @return
+     * @throws DataAccessException
+     * @throws DataIntegrityViolationException
+     * @throws OptimisticLockingFailureException
+     */
+    public Serializable save(E entity, boolean flush) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException;
+
+    /**
+     * Save object to database
+     * 
+     * @param entity
+     * @return
+     * @throws DataAccessException
+     * @throws DataIntegrityViolationException
+     * @throws OptimisticLockingFailureException
+     */
+    public void update(E entity, boolean flush) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException;
+
 }

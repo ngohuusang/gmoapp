@@ -11,5 +11,9 @@ public interface PlatformService {
 
     PlatformDto saveOrCreate(PlatformDto platform);
 
-    void delete(Integer platformId);
+    void delete(Integer platformId, boolean permalink);
+
+    void update(PlatformDto platformDto);
+
+    PlatformDto save(PlatformDto platformDto);
 }

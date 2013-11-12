@@ -145,7 +145,7 @@ public class Platform extends AbstractDomain<Integer> {
         this.updateDate = updateDate;
     }
 
-    @Column(name = "order")
+    @Column(name = "p_order")
     public int getOrder() {
         return order;
     }

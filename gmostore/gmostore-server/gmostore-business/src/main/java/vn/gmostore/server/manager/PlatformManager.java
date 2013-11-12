@@ -18,6 +18,10 @@ public interface PlatformManager {
 
     public Platform saveOrUpdate(Platform platform, boolean flush);
 
-    public void delete(Integer platformId);
+    public Platform save(Platform platform, boolean flush);
+
+    public void update(Platform platform, boolean flush);
+
+    public void delete(Integer platformId, boolean permalink);
 
 }

@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -20,14 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.orm.hibernate4.HibernateOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import vn.gmostore.basic.util.ExceptionNotificationHelper;
 import vn.gmostore.server.dao.AbstractDao;
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDao<E, I> {
-    
+
     protected static final int DEFAULT_OFFSET = 0;
     protected static final int DEFAULT_LIMIT = 1000;
 
@@ -74,9 +77,19 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public E saveOrUpdate(E e) {
-        getCurrentSession().saveOrUpdate(e);
-        return e;
+    public E saveOrUpdate(E entity) {
+        String objectName = entity.getClass().getSimpleName();
+        Assert.hasText(objectName, "The name of the persistent object type must not be empty.");
+        try {
+            E tmp = saveOrUpdate(entity);
+            return tmp;
+        } catch (HibernateOptimisticLockingFailureException e) {
+            String message = "The current " + objectName + " was modified or deleted in the meantime.";
+            ExceptionNotificationHelper.notifyOptimisticLockingFailure(message, objectName, e);
+        } catch (ConstraintViolationException e) {
+            ExceptionNotificationHelper.notifyDataIntegrityViolationFailure(e.getConstraintName(), e);
+        }
+        return null;
     }
 
     @Override
@@ -96,9 +109,56 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public E saveOrUpdateAndFlush(E entity) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException {
-        E tmp = saveOrUpdate(entity);
-        getCurrentSession().flush();
+        String objectName = entity.getClass().getSimpleName();
+        Assert.hasText(objectName, "The name of the persistent object type must not be empty.");
+        try {
+            E tmp = saveOrUpdate(entity);
+            getCurrentSession().flush();
+            return tmp;
+        } catch (HibernateOptimisticLockingFailureException e) {
+            String message = "The current " + objectName + " was modified or deleted in the meantime.";
+            ExceptionNotificationHelper.notifyOptimisticLockingFailure(message, objectName, e);
+        } catch (ConstraintViolationException e) {
+            ExceptionNotificationHelper.notifyDataIntegrityViolationFailure(e.getConstraintName(), e);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Serializable save(E entity, boolean flush) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException {
+        String objectName = entity.getClass().getSimpleName();
+        Assert.hasText(objectName, "The name of the persistent object type must not be empty.");
+        Serializable tmp = null;
+        try {
+            tmp = getCurrentSession().save(entity);
+            if (flush)
+                getCurrentSession().flush();
+        } catch (HibernateOptimisticLockingFailureException e) {
+            String message = "The current " + objectName + " was modified or deleted in the meantime.";
+            ExceptionNotificationHelper.notifyOptimisticLockingFailure(message, objectName, e);
+        } catch (ConstraintViolationException e) {
+            ExceptionNotificationHelper.notifyDataIntegrityViolationFailure(e.getConstraintName(), e);
+        }
+
         return tmp;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(E entity, boolean flush) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException {
+        String objectName = entity.getClass().getSimpleName();
+        Assert.hasText(objectName, "The name of the persistent object type must not be empty.");
+        try {
+            getCurrentSession().update(entity);
+            if (flush)
+                getCurrentSession().flush();
+        } catch (HibernateOptimisticLockingFailureException e) {
+            String message = "The current " + objectName + " was modified or deleted in the meantime.";
+            ExceptionNotificationHelper.notifyOptimisticLockingFailure(message, objectName, e);
+        } catch (ConstraintViolationException e) {
+            ExceptionNotificationHelper.notifyDataIntegrityViolationFailure(e.getConstraintName(), e);
+        }
     }
 
     @Override

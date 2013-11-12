@@ -1,81 +1,100 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:oauth="http://www.springframework.org/schema/security/oauth2" 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
 	xmlns:sec="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    
-    <http pattern="/oauth/token" create-session="stateless" authentication-manager-ref="clientAuthenticationManager"
+
+	<http pattern="/oauth/token" create-session="stateless"
+		authentication-manager-ref="clientAuthenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
 		<http-basic entry-point-ref="clientAuthenticationEntryPoint" />
-		<!-- include this only if you need to authenticate clients via request parameters -->
-		<custom-filter ref="clientCredentialsTokenEndpointFilter" after="BASIC_AUTH_FILTER" />
+		<!-- include this only if you need to authenticate clients via request 
+			parameters -->
+		<custom-filter ref="clientCredentialsTokenEndpointFilter"
+			after="BASIC_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 	</http>
-	
-	<http entry-point-ref="oauthAuthenticationEntryPoint" access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security">
-        <intercept-url pattern="/api/user/**" access="ROLE_USER" />
-        <intercept-url pattern="/api/user" access="ROLE_USER" />
-        <intercept-url pattern="http://localhost:8080/gmostore-api/products" access="ROLE_USER" />
-        <form-login authentication-success-handler-ref="loginSuccessHandler" />
-		<anonymous enabled="false"/>
-        <logout />
-        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
-    </http>
-    
-	<bean id="loginSuccessHandler" class="vn.gmostore.basic.oauth.AuthenticateSuccessfulHandler" />
-	<!-- The OAuth2 protected resources are separated out into their own block so we can deal with authorization and error handling 
-		separately. This isn't mandatory, but it makes it easier to control the behavior. -->
-<!-- 	<http pattern="/oauth/(users|clients)/.*" request-matcher="regex" create-session="stateless" entry-point-ref="oauthAuthenticationEntryPoint" -->
-<!-- 		use-expressions="true" xmlns="http://www.springframework.org/schema/security"> -->
-<!-- 		<anonymous enabled="false" /> -->
-<!-- 		<intercept-url pattern="/oauth/users/([^/].*?)/tokens/.*" -->
-<!-- 			access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('write')" -->
-<!-- 			method="DELETE" /> -->
-<!-- 		<intercept-url pattern="/oauth/users/.*" -->
-<!-- 			access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')" -->
-<!-- 			method="GET" /> -->
-<!-- 		<intercept-url pattern="/oauth/clients/.*" -->
-<!-- 			access="#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() and #oauth2.hasScope('read')" method="GET" /> -->
-<!-- 		<intercept-url pattern="/**" access="denyAll()"/> -->
-<!-- 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" /> -->
-<!-- 		<access-denied-handler ref="oauthAccessDeniedHandler" /> -->
-<!-- 		<expression-handler ref="oauthWebExpressionHandler" /> -->
-<!-- 	</http> -->
 
-	<!-- The OAuth2 protected resources are separated out into their own block so we can deal with authorization and error handling 
-		separately. This isn't mandatory, but it makes it easier to control the behaviour. -->
-<!-- 	<http pattern="/api/user/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint" -->
-<!-- 		access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security"> -->
-<!-- 		<anonymous enabled="false" /> -->
-<!-- 		<intercept-url pattern="/api" access="ROLE_USER,SCOPE_READ" /> -->
-<!-- 		<intercept-url pattern="/api/user/**" access="ROLE_USER,SCOPE_TRUST" /> -->
-<!-- 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" /> -->
-<!-- 		<logout invalidate-session="true" logout-url="/logout"/> -->
-<!-- 		<access-denied-handler ref="oauthAccessDeniedHandler" /> -->
-<!-- 	</http> -->
-	
-	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+	<http entry-point-ref="oauthAuthenticationEntryPoint"
+		access-decision-manager-ref="accessDecisionManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/api/user/**" access="ROLE_USER" />
+		<intercept-url pattern="/api/user" access="ROLE_USER" />
+		<intercept-url pattern="http://localhost:8080/gmostore-api/products"
+			access="ROLE_USER" />
+		<form-login authentication-success-handler-ref="loginSuccessHandler" />
+		<anonymous enabled="false" />
+		<logout />
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+	</http>
+
+	<bean id="loginSuccessHandler" class="vn.gmostore.basic.oauth.AuthenticateSuccessfulHandler" />
+	<!-- The OAuth2 protected resources are separated out into their own block 
+		so we can deal with authorization and error handling separately. This isn't 
+		mandatory, but it makes it easier to control the behavior. -->
+	<!-- <http pattern="/oauth/(users|clients)/.*" request-matcher="regex" create-session="stateless" 
+		entry-point-ref="oauthAuthenticationEntryPoint" -->
+	<!-- use-expressions="true" xmlns="http://www.springframework.org/schema/security"> -->
+	<!-- <anonymous enabled="false" /> -->
+	<!-- <intercept-url pattern="/oauth/users/([^/].*?)/tokens/.*" -->
+	<!-- access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') 
+		or #oauth2.isClient()) and #oauth2.hasScope('write')" -->
+	<!-- method="DELETE" /> -->
+	<!-- <intercept-url pattern="/oauth/users/.*" -->
+	<!-- access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') 
+		or #oauth2.isClient()) and #oauth2.hasScope('read')" -->
+	<!-- method="GET" /> -->
+	<!-- <intercept-url pattern="/oauth/clients/.*" -->
+	<!-- access="#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() 
+		and #oauth2.hasScope('read')" method="GET" /> -->
+	<!-- <intercept-url pattern="/**" access="denyAll()"/> -->
+	<!-- <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" 
+		/> -->
+	<!-- <access-denied-handler ref="oauthAccessDeniedHandler" /> -->
+	<!-- <expression-handler ref="oauthWebExpressionHandler" /> -->
+	<!-- </http> -->
+
+	<!-- The OAuth2 protected resources are separated out into their own block 
+		so we can deal with authorization and error handling separately. This isn't 
+		mandatory, but it makes it easier to control the behaviour. -->
+	<!-- <http pattern="/api/user/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint" -->
+	<!-- access-decision-manager-ref="accessDecisionManager" xmlns="http://www.springframework.org/schema/security"> -->
+	<!-- <anonymous enabled="false" /> -->
+	<!-- <intercept-url pattern="/api" access="ROLE_USER,SCOPE_READ" /> -->
+	<!-- <intercept-url pattern="/api/user/**" access="ROLE_USER,SCOPE_TRUST" 
+		/> -->
+	<!-- <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" 
+		/> -->
+	<!-- <logout invalidate-session="true" logout-url="/logout"/> -->
+	<!-- <access-denied-handler ref="oauthAccessDeniedHandler" /> -->
+	<!-- </http> -->
+
+	<bean id="oauthAuthenticationEntryPoint"
+		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
 		<property name="realmName" value="gmostore-services" />
 	</bean>
 
-	<bean id="clientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+	<bean id="clientAuthenticationEntryPoint"
+		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
 		<property name="realmName" value="gmostore-services/client" />
 		<property name="typeName" value="Basic" />
 	</bean>
 
-	<bean id="oauthAccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
+	<bean id="oauthAccessDeniedHandler"
+		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 
-	<bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+	<bean id="clientCredentialsTokenEndpointFilter"
+		class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
 		<property name="authenticationManager" ref="clientAuthenticationManager" />
 	</bean>
 
-	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased"
+		xmlns="http://www.springframework.org/schema/beans">
 		<constructor-arg>
 			<list>
 				<bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
@@ -85,28 +104,34 @@
 		</constructor-arg>
 	</bean>
 
-	<authentication-manager id="clientAuthenticationManager" xmlns="http://www.springframework.org/schema/security">
-		<authentication-provider user-service-ref="clientDetailsUserService" >
-		    <!-- sec:password-encoder hash="sha" />		    --> 
+	<authentication-manager id="clientAuthenticationManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider user-service-ref="clientDetailsUserService">
+			<!-- sec:password-encoder hash="sha" /> -->
 		</authentication-provider>
 	</authentication-manager>
 
-	<authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
+	<authentication-manager alias="authenticationManager"
+		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider user-service-ref="userDetailsService" />
 	</authentication-manager>
-	
+
 	<bean id="userDetailsService" class="vn.gmostore.basic.oauth.UserDetailsServiceImpl" />
 
-	<bean id="clientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+	<bean id="clientDetailsUserService"
+		class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
 		<constructor-arg ref="clientDetails" />
 	</bean>
 
-	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore"/>
-	<!-- 	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore" > -->
-	<!-- 	    <constructor-arg name="dataSource" ref="dataSource" /> -->
-	<!-- 	</bean> -->
+	<bean id="tokenStore"
+		class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
+	<!-- <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore" 
+		> -->
+	<!-- <constructor-arg name="dataSource" ref="dataSource" /> -->
+	<!-- </bean> -->
 
-	<bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+	<bean id="tokenServices"
+		class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
 		<property name="tokenStore" ref="tokenStore" />
 		<property name="tokenEnhancer" ref="tokenEnhancer" />
 		<property name="supportRefreshToken" value="true" />
@@ -116,8 +141,10 @@
 	<bean id="tokenEnhancer" class="vn.gmostore.basic.oauth.CustomTokenEnhancer" />
 
 
-	<oauth:authorization-server  token-endpoint-url="/oauth/token" authorization-endpoint-url="/oauth/authorize" client-details-service-ref="clientDetails" token-services-ref="tokenServices">
-		<!--oauth:authorization-code authorization-code-services-ref="authorizationCodeServices"/-->
+	<oauth:authorization-server
+		token-endpoint-url="/oauth/token" authorization-endpoint-url="/oauth/authorize"
+		client-details-service-ref="clientDetails" token-services-ref="tokenServices">
+		<!--oauth:authorization-code authorization-code-services-ref="authorizationCodeServices"/ -->
 		<oauth:authorization-code />
 		<oauth:implicit />
 		<oauth:refresh-token />
@@ -126,13 +153,17 @@
 	</oauth:authorization-server>
 
 	<bean id="clientDetails" class="vn.gmostore.basic.oauth.ClientDetailsServiceImpl" />
-	
-	<oauth:resource-server id="resourceServerFilter" resource-id="gmostore-services" token-services-ref="tokenServices" />
-	
-	<oauth:resource id="gmostore-services" client-id="my-trusted-client" access-token-uri="/oauth/token" scope="read,write" />
 
-	<sec:global-method-security pre-post-annotations="enabled" proxy-target-class="true">
-		<!--you could also wire in the expression handler up at the layer of the http filters. See https://jira.springsource.org/browse/SEC-1452 -->
+	<oauth:resource-server id="resourceServerFilter"
+		resource-id="gmostore-services" token-services-ref="tokenServices" />
+
+	<oauth:resource id="gmostore-services" client-id="my-trusted-client"
+		access-token-uri="/oauth/token" scope="read,write" />
+
+	<sec:global-method-security
+		pre-post-annotations="enabled" proxy-target-class="true">
+		<!--you could also wire in the expression handler up at the layer of the 
+			http filters. See https://jira.springsource.org/browse/SEC-1452 -->
 		<sec:expression-handler ref="oauthExpressionHandler" />
 	</sec:global-method-security>
 
@@ -141,29 +172,32 @@
 	<oauth:web-expression-handler id="oauthWebExpressionHandler" />
 
 	<!--Basic application beans. -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="mediaTypes">
 			<map>
 				<entry key="json" value="application/json" />
 			</map>
 		</property>
 		<property name="viewResolvers">
-			<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			<bean
+				class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 				<property name="prefix" value="/WEB-INF/jsp/"></property>
 				<property name="suffix" value=".jsp"></property>
 			</bean>
 		</property>
 		<property name="defaultViews">
-			<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+			<bean
+				class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
 				<property name="extractValueFromSingleKeyModel" value="true" />
 			</bean>
 		</property>
 	</bean>
-	
+
 	<!-- Override the default mappings for approval and error pages -->
-	
-<!-- 	<bean id="userDao" class="vn.gmostore.dao.impl.UserDaoImpl"> -->
-<!-- 		<property name="sessionFactory" ref="sessionFactory" /> -->
-<!-- 		<property name="baseDao" ref="baseDao" /> -->
-<!-- 	</bean> -->
+
+	<!-- <bean id="userDao" class="vn.gmostore.dao.impl.UserDaoImpl"> -->
+	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
+	<!-- <property name="baseDao" ref="baseDao" /> -->
+	<!-- </bean> -->
 </beans>

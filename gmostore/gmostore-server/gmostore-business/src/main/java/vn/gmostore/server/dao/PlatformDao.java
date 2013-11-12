@@ -12,11 +12,17 @@ import vn.gmostore.basic.model.Platform;
  */
 public interface PlatformDao {
 
-    public Platform getById(Integer id);
+    void delete(Integer platformId);
 
-    public List<Platform> getPlatforms(int offset, int limit);
+    void trash(Integer platformId);
 
-    public void delete(Integer platformId);
+    Platform saveOrUpdate(Platform platform, boolean flush);
 
-    public Platform saveOrUpdate(Platform platform, boolean flush);
+    void update(Platform platform, boolean flush);
+
+    Platform save(Platform platform, boolean flush);
+
+    Platform getById(Integer id, boolean inTrash);
+
+    List<Platform> getPlatforms(int offset, int limit, boolean inTrash);
 }

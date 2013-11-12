@@ -94,6 +94,7 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
         applyDef(m, MissingServletRequestParameterException.class, HttpStatus.BAD_REQUEST);
         applyDef(m, TypeMismatchException.class, HttpStatus.BAD_REQUEST);
         applyDef(m, "javax.validation.ValidationException", HttpStatus.BAD_REQUEST);
+        applyDef(m, "org.springframework.web.bind.MethodArgumentNotValidException", HttpStatus.BAD_REQUEST);
 
         // 404
         applyDef(m, NoSuchRequestHandlingMethodException.class, HttpStatus.NOT_FOUND);
@@ -130,22 +131,29 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
     @Override
     public RestError resolveError(ServletWebRequest request, Object handler, Exception ex) {
 
-        RestError template = getRestErrorTemplate(ex);
+        Exception newE = ex;
+        try {
+            ExceptionConverter.convertFrom(ex, messageSource);
+        } catch (Exception e) {
+            newE = e;
+        }
+
+        RestError template = getRestErrorTemplate(newE);
         if (template == null) {
             return null;
         }
 
         RestError.Builder builder = new RestError.Builder();
-        builder.setStatus(getStatusValue(template, request, ex));
-        builder.setCode(getCode(template, request, ex));
-        builder.setMoreInfoUrl(getMoreInfoUrl(template, request, ex));
-        builder.setThrowable(ex);
+        builder.setStatus(getStatusValue(template, request, newE));
+        builder.setCode(getCode(template, request, newE));
+        builder.setMoreInfoUrl(getMoreInfoUrl(template, request, newE));
+        builder.setThrowable(newE);
 
-        String msg = getMessage(template, request, ex);
+        String msg = getMessage(template, request, newE);
         if (msg != null) {
             builder.setMessage(msg);
         }
-        msg = getDeveloperMessage(template, request, ex);
+        msg = getDeveloperMessage(template, request, newE);
         if (msg != null) {
             builder.setDeveloperMessage(msg);
         }

@@ -28,15 +28,39 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
+
+	<!-- I18N configuration -->
 	<mvc:interceptors>
-		<bean id="localeChangeInterceptor"
-			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-			<property name="paramName" value="lang" />
-		</bean>
+		<ref bean="localeChangeInterceptor" />
 	</mvc:interceptors>
 
 	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="localeChangeInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+	<!-- <bean id="localeResolver" -->
+	<!-- class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" 
+		/> -->
+
+	<!-- bind your messages.properties -->
+	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messageSource">
+		<property name="basename" value="messages" />
+	</bean>
 
 	<!-- Unfortunately we have to repeat an instance of this class here because 
 		the mvc:message-converters element above does not support <ref/> elements: -->
@@ -73,7 +97,7 @@
 	<!-- Allow Exceptions to be handled in annotated methods if desired. Otherwise 
 		fallback to the 'restExceptionResolver' below: -->
 	<bean id="annotationMethodHandlerExceptionResolver"
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" >
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver">
 		<property name="order" value="1" />
 	</bean>
 	<bean id="restExceptionResolver" class="vn.gmostore.api.exhandler.RestExceptionHandler">
@@ -92,6 +116,8 @@
 						<!-- 404 -->
 						<entry key="vn.gmostore.api.exception.UnknownResourceException"
 							value="404, _exmsg" />
+						<entry key="vn.gmostore.api.exception.ValidatorException"
+							value="400, _exmsg" />
 						<!-- 500 (catch all): -->
 						<entry key="Throwable" value="500" />
 					</map>
@@ -114,7 +140,7 @@
 	</bean>
 
 	<bean id="keyGenerator"
-		class="vn.gmostore.api.util.FirstMethodParamIdHashCodeKeyGenerator" />
+		class="com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator" />
 
 	<tx:annotation-driven />
 

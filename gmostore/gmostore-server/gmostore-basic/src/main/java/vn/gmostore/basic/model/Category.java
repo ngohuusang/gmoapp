@@ -40,7 +40,7 @@ public class Category extends AbstractDomain<Integer> {
     private Category category;
     private String name;
     private String description;
-    private Byte order;
+    private int order;
     private long createDate;
     private Long updateDate;
     @JsonIgnore
@@ -59,7 +59,7 @@ public class Category extends AbstractDomain<Integer> {
         this.createDate = createDate;
     }
 
-    public Category(Category category, String name, String description, Byte order, long createDate, Long updateDate, Long deleteDate, Set<Product> products,
+    public Category(Category category, String name, String description, int order, long createDate, Long updateDate, Long deleteDate, Set<Product> products,
             Set<Category> categories) {
         this.category = category;
         this.name = name;
@@ -113,12 +113,12 @@ public class Category extends AbstractDomain<Integer> {
         this.description = description;
     }
 
-    @Column(name = "order")
-    public Byte getOrder() {
+    @Column(name = "c_order", nullable = false)
+    public int getOrder() {
         return this.order;
     }
 
-    public void setOrder(Byte order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 

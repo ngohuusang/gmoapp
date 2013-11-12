@@ -42,7 +42,7 @@
 			</p>
 
 			<p>
-				<input name="login" value="Login" type="submit"/>
+				<input name="login" value="Login" type="submit" />
 			</p>
 		</form>
 	</div>
