@@ -12,12 +12,16 @@ import vn.gmostore.basic.model.Price;
  */
 public interface PriceDao {
 
-    public Price getLatestBy(Integer productId);
+    Price getLatestBy(Integer productId);
 
-    public void delete(Integer priceId);
+    void delete(Integer priceId);
 
-    public Price saveOrUpdate(Price price, boolean flush);
+    void trash(Integer priceId);
 
-    public List<Price> getPrices(Integer productId);
+    Price save(Price price, boolean flush);
+
+    void update(Price price, boolean flush);
+
+    List<Price> getPrices(Integer productId);
 
 }

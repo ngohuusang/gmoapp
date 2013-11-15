@@ -17,14 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 
 /**
@@ -32,7 +30,6 @@ import org.hibernate.search.annotations.Store;
  */
 @Entity
 @Table(name = "user", catalog = "gmostore_db", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
-@Indexed(index = "Users")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends AbstractDomain<Integer> {
 
@@ -51,23 +48,15 @@ public class User extends AbstractDomain<Integer> {
     private long createDate;
     private Long updateDate;
     private Long activeDate;
-    @JsonIgnore
     private Long deleteDate;
-    @JsonIgnore
     private Set<UserDevice> userDevices = new HashSet<UserDevice>(0);
-    @JsonIgnore
     private Set<Comment> comments = new HashSet<Comment>(0);
     private Set<WishList> wishLists = new HashSet<WishList>(0);
     private Set<Sns> snses = new HashSet<Sns>(0);
-    @JsonIgnore
     private Set<HistoryRecharge> historyRecharges = new HashSet<HistoryRecharge>(0);
-    @JsonIgnore
     private Set<Rating> ratings = new HashSet<Rating>(0);
-    @JsonIgnore
     private Set<HistoryTransaction> historyTransactions = new HashSet<HistoryTransaction>(0);
-    @JsonIgnore
     private Set<HistoryAction> historyActions = new HashSet<HistoryAction>(0);
-    @JsonIgnore
     private Set<StatusHistory> statusHistories = new HashSet<StatusHistory>(0);
 
     public User() {

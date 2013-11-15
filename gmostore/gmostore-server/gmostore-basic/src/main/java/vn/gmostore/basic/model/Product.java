@@ -18,10 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Indexed;
 
 import com.gwtplatform.dispatch.shared.Result;
 
@@ -30,7 +28,6 @@ import com.gwtplatform.dispatch.shared.Result;
  */
 @Entity
 @Table(name = "product", catalog = "gmostore_db")
-@Indexed(index = "Products")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Product extends AbstractDomain<Integer> implements Result {
 
@@ -39,11 +36,8 @@ public class Product extends AbstractDomain<Integer> implements Result {
      */
     private static final long serialVersionUID = 1L;
     private Integer id;
-    @JsonIgnore
     private Platform platform;
-    @JsonIgnore
     private Publisher publisher;
-    @JsonIgnore
     private Category category;
     private String fullName;
     private String packageName;
@@ -61,25 +55,15 @@ public class Product extends AbstractDomain<Integer> implements Result {
     private long createDate;
     private Long updateDate;
     private Long deleteDate;
-    @JsonIgnore
     private Set<ScreenShot> screenShots = new HashSet<ScreenShot>(0);
-    @JsonIgnore
     private Set<WishList> wishLists = new HashSet<WishList>(0);
-    @JsonIgnore
     private Set<Rating> ratings = new HashSet<Rating>(0);
-    @JsonIgnore
     private Set<Price> prices = new HashSet<Price>(0);
-    @JsonIgnore
     private Set<HistoryTransaction> historyTransactions = new HashSet<HistoryTransaction>(0);
-    @JsonIgnore
     private Set<HistoryAction> historyActions = new HashSet<HistoryAction>(0);
-    @JsonIgnore
     private Set<Promotion> promotions = new HashSet<Promotion>(0);
-    @JsonIgnore
     private Set<Version> versions = new HashSet<Version>(0);
-    @JsonIgnore
     private Set<Comment> comments = new HashSet<Comment>(0);
-    @JsonIgnore
     private Set<ListTypeHasProduct> listTypeHasProducts = new HashSet<ListTypeHasProduct>(0);
 
     public Product() {

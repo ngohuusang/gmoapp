@@ -31,10 +31,10 @@ public class PlatformManagerImpl implements PlatformManager {
     PlatformDao platformDao;
 
     @Override
-    public Platform getById(Integer id) {
+    public Platform getById(Integer id, boolean inTrash) {
         Assert.notNull(id, "The platform id must be not null");
-        logger.info("Get platform by id=" + id);
-        return platformDao.getById(id, false);
+        logger.info("Get platform by id=" + id + " in trash=" + inTrash);
+        return platformDao.getById(id, inTrash);
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface RatingManager {
 
     public void delete(Integer productId);
 
-    public Rating saveOrUpdate(Rating rating, boolean flush);
+    public Rating rate(Integer productId, String username, int mark);
 
     public Rating getBy(Integer productId, String username);
 }

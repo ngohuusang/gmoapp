@@ -6,6 +6,8 @@ package vn.gmostore.server.dao.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -34,9 +36,13 @@ public class PlatformDaoImpl extends AbstractDaoImpl<Platform, Integer> implemen
     @Override
     public Platform getById(Integer id, boolean inTrash) {
         Platform platform = findById(id);
-        if (!inTrash && platform.getDeleteDate() != null) {
-            return null;
+
+        if (!inTrash && platform != null && platform.getDeleteDate() != null) {
+            throw new NoResultException("Platform with id=" + id + " has been moved to trash!");
+        } else if (platform == null) {
+            throw new NoResultException("Platform with id=" + id + " is not found!");
         }
+
         return platform;
     }
 
@@ -70,17 +76,21 @@ public class PlatformDaoImpl extends AbstractDaoImpl<Platform, Integer> implemen
     @Override
     public void delete(Integer platformId) {
         Platform platform = getById(platformId, true);
-        if (platform != null)
+        if (platform != null) {
             super.delete(platform);
+        } else {
+            throw new NoResultException("Platform with id=" + platformId + " not found!");
+        }
     }
 
     @Override
     public void trash(Integer platformId) {
         Platform platform = getById(platformId, false);
-        platform.setDeleteDate(new Date().getTime());
-
         if (platform != null) {
+            platform.setDeleteDate(new Date().getTime());
             update(platform, true);
+        } else {
+            throw new NoResultException("Platform with id=" + platformId + " not found or has been moved to trash!");
         }
     }
 

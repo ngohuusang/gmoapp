@@ -43,11 +43,8 @@ public class Category extends AbstractDomain<Integer> {
     private int order;
     private long createDate;
     private Long updateDate;
-    @JsonIgnore
     private Long deleteDate;
-    @JsonIgnore
     private Set<Product> products = new HashSet<Product>(0);
-    @JsonIgnore
     private Set<Category> categories = new HashSet<Category>(0);
 
     public Category() {

@@ -99,6 +99,7 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
         // 404
         applyDef(m, NoSuchRequestHandlingMethodException.class, HttpStatus.NOT_FOUND);
         applyDef(m, "org.hibernate.ObjectNotFoundException", HttpStatus.NOT_FOUND);
+        applyDef(m, "javax.persistence.NoResultException", HttpStatus.NOT_FOUND);
 
         // 405
         applyDef(m, HttpRequestMethodNotSupportedException.class, HttpStatus.METHOD_NOT_ALLOWED);

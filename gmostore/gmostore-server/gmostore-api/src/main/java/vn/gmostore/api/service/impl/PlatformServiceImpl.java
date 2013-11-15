@@ -21,7 +21,7 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     public PlatformDto getBy(Integer id) {
-        Platform platform = platformManager.getById(id);
+        Platform platform = platformManager.getById(id, false);
         return new PlatformDto(platform);
     }
 

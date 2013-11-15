@@ -186,6 +186,14 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Query queryString(String queryString) throws DataAccessException {
+        Assert.notNull(queryString, "Query string cannot be null!");
+        Query query = getCurrentSession().createQuery(queryString);
+        return query;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public E bySimpleNaturalId(Object value) throws DataAccessException {

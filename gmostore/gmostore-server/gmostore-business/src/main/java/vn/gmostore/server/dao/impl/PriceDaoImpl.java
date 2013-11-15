@@ -48,7 +48,7 @@ public class PriceDaoImpl extends AbstractDaoImpl<Price, Integer> implements Pri
     }
 
     @Override
-    public Price saveOrUpdate(Price price, boolean flush) {
+    public Price save(Price price, boolean flush) {//TODO
         if (flush)
             return super.saveOrUpdateAndFlush(price);
         else
@@ -76,5 +76,10 @@ public class PriceDaoImpl extends AbstractDaoImpl<Price, Integer> implements Pri
 
         throw new IllegalArgumentException("The price with id=" + priceId + " is not found!");
 
+    }
+
+    @Override
+    public void trash(Integer priceId) {
+        // TODO Auto-generated method stub
     }
 }

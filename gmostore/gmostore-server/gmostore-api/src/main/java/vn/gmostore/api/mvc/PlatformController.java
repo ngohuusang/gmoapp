@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import vn.gmostore.api.service.PlatformService;
 import vn.gmostore.api.util.ApiConstants;
@@ -61,6 +62,7 @@ public class PlatformController {
     @RequestMapping(method = RequestMethod.POST, value = "/admin/platforms")
     @TriggersRemove(cacheName = "platformsCache", keyGeneratorName = "keyGenerator")
     @ResponseBody
+    @ResponseStatus(value = HttpStatus.CREATED)
     public GetResult<Dto> addPlatform(@RequestBody @Valid PlatformDto platformDto) {
 
         PlatformDto result = platformService.save(platformDto);

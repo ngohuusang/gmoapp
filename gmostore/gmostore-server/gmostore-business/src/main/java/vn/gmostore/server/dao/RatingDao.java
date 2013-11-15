@@ -10,11 +10,13 @@ import vn.gmostore.basic.model.Rating;
  */
 public interface RatingDao {
 
-    public int getAverage(Integer productId);
+    int getAverage(Integer productId);
 
-    public void delete(Integer productId);
+    void delete(Integer productId);
 
-    public Rating saveOrUpdate(Rating rating, boolean flush);
+    Rating save(Rating rating, boolean flush);
 
-    public Rating getBy(Integer productId, String username);
+    void update(Rating rating, boolean flush);
+
+    Rating getBy(Integer productId, String username);
 }

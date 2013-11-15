@@ -6,21 +6,27 @@ package vn.gmostore.server.dao;
 import java.util.List;
 
 import vn.gmostore.basic.model.Product;
+import vn.gmostore.basic.util.OrderBy;
 
 /**
  *
  */
 public interface ProductDao {
 
-    public Product getById(Integer id);
+    List<Product> getProducts(Integer platformId, Integer categoryId, int offset, int limit, OrderBy[] orderBys, boolean inTrash);
 
-    public List<Product> getProducts(Integer platformId, Integer categoryId, int offset, int limit, String orderBy, String orderType);
+    void delete(Integer productId);
 
-    public void delete(Integer productId);
+    void trash(Integer productId);
 
-    public Product saveOrUpdate(Product product, boolean flush);
+    void update(Product product, boolean flush);
 
-    public List<Product> search(String search, boolean exact, String... columnNames);
+    Product save(Product product, boolean flush);
 
-    public Integer getProductsCount(Integer platformId, Integer categoryId);
+    List<Product> search(String search, boolean exact, String... columnNames);
+
+    Integer getProductsCount(Integer platformId, Integer categoryId, boolean inTrash);
+
+    Product getById(Integer id, boolean inTrash);
+
 }

@@ -28,8 +28,6 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    //    @TriggersRemove(cacheName="infoCache", keyGeneratorName="infoKeyGenerator")//TODO: update, delete, insert
-
     @RequestMapping(value = "platforms/{platfomId}/products/{id}",//
     method = RequestMethod.GET// Only response on GET
     //    consumes = MediaType.APPLICATION_JSON_VALUE //Need to set Header: "Content-Type: application/json" to get right content type
@@ -37,12 +35,11 @@ public class ProductController {
     @Cacheable(cacheName = "productCache", keyGeneratorName = "keyGenerator")
     @ResponseBody
     public GetResult<ProductDetailDto> getProductDetailsById(//
-            @PathVariable
-            Integer platformId, @PathVariable
-            Integer id) throws IOException {
-        ProductDetailDto productDetailDto = productService.getProductDetailsBy(platformId, id);
-        GetResult<ProductDetailDto> product = new GetResult<ProductDetailDto>(productDetailDto);
-        return product;
+            @PathVariable Long platformId, @PathVariable Long id) throws IOException {
+
+        ProductDetailDto productDetailDto = productService.getProductDetailsBy(platformId.intValue(), id.intValue());
+
+        return new GetResult<ProductDetailDto>(productDetailDto);
     }
 
     @RequestMapping(value = "platforms/{platfomId}/products",//
@@ -53,18 +50,12 @@ public class ProductController {
     //TODO: Cache
     @ResponseBody
     public GetResults<ProductDto> getProducts(//
-            @PathVariable
-            Integer platfomId,//
-            @RequestParam(required = false)
-            String orderBy,//
-            @RequestParam(required = false)
-            String orderType,//
-            @RequestParam(required = false)
-            Integer category,//
-            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_OFFSET)
-            int offset,//
-            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_LIMIT)
-            int limit) {
+            @PathVariable Integer platfomId,//
+            @RequestParam(required = false) String orderBy,//
+            @RequestParam(required = false) String orderType,//
+            @RequestParam(required = false) Integer category,//
+            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_OFFSET) int offset,//
+            @RequestParam(required = false, defaultValue = ApiConstants.DEFAULT_LIMIT) int limit) {
 
         //        List<ProductDto> productDtos = productService.getProducts(platfomId, category, offset, limit, orderBy, orderType);
 

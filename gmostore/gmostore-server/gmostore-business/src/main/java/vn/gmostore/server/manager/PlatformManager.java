@@ -12,16 +12,16 @@ import vn.gmostore.basic.model.Platform;
  */
 public interface PlatformManager {
 
-    public Platform getById(Integer id);
+    Platform getById(Integer id, boolean inTrash);
 
-    public List<Platform> getPlatforms(int offset, int limit);
+    List<Platform> getPlatforms(int offset, int limit);
 
-    public Platform saveOrUpdate(Platform platform, boolean flush);
+    Platform saveOrUpdate(Platform platform, boolean flush);
 
-    public Platform save(Platform platform, boolean flush);
+    Platform save(Platform platform, boolean flush);
 
-    public void update(Platform platform, boolean flush);
+    void update(Platform platform, boolean flush);
 
-    public void delete(Integer platformId, boolean permalink);
+    void delete(Integer platformId, boolean permalink);
 
 }

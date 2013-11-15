@@ -4,23 +4,40 @@
 package vn.gmostore.server.manager;
 
 import java.util.List;
+import java.util.Map;
 
 import vn.gmostore.basic.model.Product;
+import vn.gmostore.basic.util.OrderBy;
 
 /**
  *
  */
 public interface ProductManager {
 
-    public Product getById(Integer id);
+    Product getById(Integer id, boolean inTrash);
 
-    public List<Product> getProducts(Integer platformId, Integer categoryId, int offset, int limit, String orderBy, String orderType);
+    List<Product> getProducts(Integer platformId, Integer categoryId, int offset, int limit, OrderBy[] orderBy);
 
-    public void delete(Integer productId);
+    void delete(Integer productId, boolean permalink);
 
-    public Product saveOrUpdate(Product product, boolean flush);
+    Product save(Product product, boolean flush);
 
-    public List<Product> search(String search, boolean exact, String... columnNames);
+    void update(Product product, boolean flush);
 
-    public Integer getProductsCount(Integer platformId, Integer categoryId);
+    List<Product> search(String search, boolean exact, String... columnNames);
+
+    Integer getProductsCount(Integer platformId, Integer categoryId, boolean inTrash);
+
+    List<Product> getProductHot(Integer platformId, Integer categoryId, int limit);
+
+    List<Product> getLatest(Integer platformId, Integer categoryId, int limit);
+
+    Map<Integer, Integer> getTopDownloaded(Integer platformId, Integer categoryId, int limit);
+
+    List<Product> getTopViews(Integer platformId, Integer categoryId, int limit);
+
+    List<Product> getTopHot(Integer platformId, Integer categoryId, int limit);
+
+    List<Product> getTopFree(Integer platformId, Integer categoryId, int limit);
+
 }

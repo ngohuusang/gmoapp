@@ -38,6 +38,7 @@ public class Version extends AbstractDomain<Integer> {
     private String name;
     private String code;
     private String description;
+    private String requirement;
     private long createDate;
     private Long updateDate;
     private Long deleteDate;
@@ -151,4 +152,12 @@ public class Version extends AbstractDomain<Integer> {
         this.downloadLinks = downloadLinks;
     }
 
+    @Column(name = "requirement", length = 100)
+    public String getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(String requirement) {
+        this.requirement = requirement;
+    }
 }

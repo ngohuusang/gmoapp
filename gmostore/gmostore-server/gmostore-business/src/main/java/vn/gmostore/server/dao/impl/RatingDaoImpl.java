@@ -32,11 +32,8 @@ public class RatingDaoImpl extends AbstractDaoImpl<Rating, Integer> implements R
     }
 
     @Override
-    public Rating saveOrUpdate(Rating rating, boolean flush) {
-        if (flush)
-            return super.saveOrUpdateAndFlush(rating);
-        else
-            return saveOrUpdate(rating, flush);
+    public Rating save(Rating rating, boolean flush) {
+        return (Rating) super.save(rating, flush);//TODO
     }
 
     @Override
@@ -68,7 +65,6 @@ public class RatingDaoImpl extends AbstractDaoImpl<Rating, Integer> implements R
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("product.id", productId));
         criteria.add(Restrictions.eq("user.username", username));
-
         List<Rating> ratings = findByCriteria(criteria);
 
         if (ratings.size() != 0)

@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -31,7 +30,6 @@ public class DownloadLink extends AbstractDomain<Integer> {
      */
     private static final long serialVersionUID = 1L;
     private Integer id;
-    @JsonIgnore
     private Version version;
     private String url;
     private String status;
@@ -39,7 +37,6 @@ public class DownloadLink extends AbstractDomain<Integer> {
     private int downloadCount;
     private long createDate;
     private Long updateDate;
-    @JsonIgnore
     private Long deleteDate;
 
     public DownloadLink() {

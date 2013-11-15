@@ -16,7 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Indexed;
 
 import com.gwtplatform.dispatch.shared.Result;
 
@@ -25,7 +24,6 @@ import com.gwtplatform.dispatch.shared.Result;
  */
 @Entity
 @Table(name = "rating", catalog = "gmostore_db")
-@Indexed(index = "Ratings")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Rating extends AbstractDomain<Integer> implements Result {
 

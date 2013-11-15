@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,10 +39,8 @@ public class Platform extends AbstractDomain<Integer> {
     private String customeCode;
     private int order;
     private long createDate;
-    @JsonIgnore
     private Long deleteDate;
     private Long updateDate;
-    @JsonIgnore
     private Set<Product> products = new HashSet<Product>(0);
 
     public Platform() {

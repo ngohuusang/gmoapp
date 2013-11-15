@@ -25,11 +25,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDetailDto getProductDetailsBy(Integer platformId, Integer id) {
-        if (id != null) {
-            Product product = productManager.getById(id);
-            return new ProductDetailDto(product);
-        }
-        return null;
+        Product product = productManager.getById(id);
+        return new ProductDetailDto(product);
     }
 
     @Override

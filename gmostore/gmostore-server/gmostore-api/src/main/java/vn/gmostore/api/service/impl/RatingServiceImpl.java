@@ -1,14 +1,10 @@
 package vn.gmostore.api.service.impl;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.gmostore.api.service.RatingService;
-import vn.gmostore.basic.model.Product;
 import vn.gmostore.basic.model.Rating;
-import vn.gmostore.basic.model.User;
 import vn.gmostore.server.manager.ProductManager;
 import vn.gmostore.server.manager.RatingManager;
 import vn.gmostore.server.manager.UserManager;
@@ -27,11 +23,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public boolean rate(Integer productId, String username, int mark) {
-        User user = userManager.getUserByUsername(username);
-        Product product = productManager.getById(productId);
-        Rating rating = new Rating(user, product, 0, new Date().getTime(), mark);
-
-        rating = ratingManager.saveOrUpdate(rating, true);
+        Rating rating = ratingManager.rate(productId, username, mark);
 
         return rating.isPersisted();
     }

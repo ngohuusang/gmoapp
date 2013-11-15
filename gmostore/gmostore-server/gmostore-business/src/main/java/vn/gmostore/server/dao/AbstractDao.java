@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -175,5 +176,7 @@ public interface AbstractDao<E, I extends Serializable> {
      * @throws OptimisticLockingFailureException
      */
     public void update(E entity, boolean flush) throws DataAccessException, DataIntegrityViolationException, OptimisticLockingFailureException;
+
+    Query queryString(String queryString) throws DataAccessException;
 
 }
